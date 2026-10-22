@@ -17,6 +17,7 @@ sys.path.insert(0, str(HERRAMIENTAS))
 sys.dont_write_bytecode = True
 import indice_lineas  # noqa: E402
 import respaldo  # noqa: E402
+import verificar  # noqa: E402
 
 
 def correr(script, *args):
@@ -97,6 +98,56 @@ class BovedaDesordenada(unittest.TestCase):
         r = correr("verificar.py", self.boveda, self.tmp / "respaldo", self.trabajo, self.esperados)
         self.assertEqual(r.returncode, 2, r.stdout)
         self.assertIn("FALTA: pendiente.md", r.stdout)
+
+    def test_movimiento_no_puede_sobrescribir_otro_original(self):
+        permitidos = self.preparar_verificacion()
+        origen, destino = "ideas sueltas.md", "Proyecto X/plan.md"
+        # Reproduce una sobreescritura ya ocurrida: el verificador debe rechazarla.
+        (self.boveda / origen).replace(self.boveda / destino)
+        self.esperados.write_text("\n".join(permitidos), encoding="utf-8")
+        movimientos = self.trabajo / "movimientos.json"
+        movimientos.write_text(json.dumps({origen: destino}), encoding="utf-8")
+        r = correr("verificar.py", self.boveda, self.tmp / "respaldo", self.trabajo, self.esperados,
+                   "--movimientos", movimientos)
+        self.assertEqual(r.returncode, 2)
+        self.assertIn("destino estaba ocupado", r.stderr)
+
+    def test_movimientos_aceptan_wikilinks_reparados_segun_el_plan(self):
+        permitidos = self.preparar_verificacion()
+        movimientos = {"ideas sueltas.md": "Sin clasificar/ideas.md", "Proyecto X/plan.md": "Datos/plan.md"}
+        for origen, destino in movimientos.items():
+            (self.boveda / destino).parent.mkdir(parents=True, exist_ok=True)
+            (self.boveda / origen).rename(self.boveda / destino)
+        nota = self.boveda / "Sin clasificar/ideas.md"
+        nota.write_text(nota.read_text(encoding="utf-8").replace("[[Proyecto X/plan]]", "[[Datos/plan]]"), encoding="utf-8")
+        self.esperados.write_text("\n".join(permitidos + list(movimientos.values())), encoding="utf-8")
+        mapa = self.trabajo / "movimientos.json"
+        mapa.write_text(json.dumps(movimientos), encoding="utf-8")
+        r = correr("verificar.py", self.boveda, self.tmp / "respaldo", self.trabajo, self.esperados,
+                   "--movimientos", mapa)
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+
+    def test_movimiento_repara_markdown_sin_cambiar_el_destino(self):
+        escribir(self.boveda, "ideas sueltas.md", "# Ideas\n\nVer [fuente](adjuntos/fuente.pdf).\n")
+        (self.boveda / "adjuntos").mkdir()
+        (self.boveda / "adjuntos/fuente.pdf").write_bytes(b"Adjunto ficticio")
+        permitidos = self.preparar_verificacion()
+        origen, destino = "ideas sueltas.md", "Datos/ideas.md"
+        (self.boveda / "Datos").mkdir()
+        (self.boveda / origen).rename(self.boveda / destino)
+        nota = self.boveda / destino
+        texto = nota.read_text(encoding="utf-8")
+        self.esperados.write_text("\n".join(permitidos + [destino]), encoding="utf-8")
+        mapa = self.trabajo / "movimientos.json"
+        mapa.write_text(json.dumps({origen: destino}), encoding="utf-8")
+        args = (self.boveda, self.tmp / "respaldo", self.trabajo, self.esperados, "--movimientos", mapa)
+        # Mismo texto tras mover, pero enlace relativo ahora roto: no alcanza comparar bytes.
+        self.assertEqual(correr("verificar.py", *args).returncode, 2)
+        nota.write_text(texto.replace("(adjuntos/fuente.pdf)", "(../adjuntos/fuente.pdf)"), encoding="utf-8")
+        r = correr("verificar.py", *args)
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        nota.write_text(texto.replace("(adjuntos/fuente.pdf)", "(../Proyecto%20X/plan.md)"), encoding="utf-8")
+        self.assertEqual(correr("verificar.py", *args).returncode, 2)
 
     def test_movimiento_con_propiedades_y_blancos_conserva_texto(self):
         origen, destino = "Proyecto X/plan.md", "Sin clasificar/plan.md"
@@ -183,6 +234,36 @@ class BovedaDesordenada(unittest.TestCase):
         r = correr("verificar.py", self.boveda, self.tmp / "respaldo", self.trabajo, esperados)
         self.assertEqual(r.returncode, 2, r.stdout)
         self.assertIn(".obsidian/app.json", r.stdout)
+
+
+class ConservacionDeEnlaces(unittest.TestCase):
+    def test_el_codigo_literal_no_se_normaliza_como_navegacion(self):
+        anteriores = {"nota.md", "plan.md"}
+        actuales = {"Datos/nota.md", "Datos/plan.md"}
+        movimientos = {"nota.md": "Datos/nota.md", "plan.md": "Datos/plan.md"}
+        envolturas = ["```markdown\n{}\n```", "~~~~\n{}\n~~~~", "`{}`", "``ejemplo `{}` ``", "    {}"]
+        for envoltura in envolturas:
+            with self.subTest(envoltura=envoltura):
+                antes = envoltura.format("[[plan]]")
+                despues = envoltura.format("[[Datos/plan]]")
+                canonico = verificar.normalizar_enlaces(antes, "nota.md", anteriores, movimientos)
+                self.assertEqual(canonico, antes)
+                self.assertNotEqual(canonico, verificar.normalizar_enlaces(despues, "Datos/nota.md", actuales, {}))
+
+    def test_destinos_etiquetas_y_fragmentos_siguen_siendo_distintos(self):
+        archivos = {"nota.md", "a#x.md", "a", "plan.md"}
+        normalizar = lambda t: verificar.normalizar_enlaces(t, "nota.md", archivos, {})
+        self.assertNotEqual(normalizar("[a](a%23x.md)"), normalizar("[a](a#x.md)"))
+        self.assertNotEqual(normalizar("[[plan|Etiqueta]]"), normalizar("[[plan|Otra etiqueta]]"))
+        self.assertNotEqual(normalizar("[[plan#Uno]]"), normalizar("[[plan#Dos]]"))
+
+    def test_movimiento_utf16_identico_conserva_bytes_sin_convertir(self):
+        with tempfile.TemporaryDirectory() as carpeta:
+            antes, despues = Path(carpeta) / "antes.md", Path(carpeta) / "despues.md"
+            contenido = "# Original\n\nTexto UTF-16 sin convertir.\n".encode("utf-16")
+            antes.write_bytes(contenido)
+            despues.write_bytes(contenido)
+            self.assertTrue(verificar.contenido_conservado(antes, despues, (lambda t: t, lambda t: t)))
 
 
 class IndiceDeLineas(unittest.TestCase):

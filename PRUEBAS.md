@@ -7,6 +7,8 @@
 - Índices exactos, descripciones de hasta diez palabras, cuerpo intacto y aplicación idempotente.
 - Movimientos con origen/destino y contenido conservado; esperados.txt no autoriza ausencias.
 - Detección de cambios ajenos, pérdida de flujos e índices pendientes.
+- Rechazo de sobreescrituras de originales aun cuando sus rutas figuren como esperadas.
+- Reparaciones de wikilinks y enlaces Markdown según los movimientos, conservando destino, etiqueta y fragmento. El código literal no se interpreta como navegación.
 - Diagnóstico sin valores privados.
 - Recorrido: preferencias → reglas aprobadas → copia → organización → conexiones → compactación conservadora → índices → carpeta/ZIP comprobado.
 
@@ -24,7 +26,7 @@ El recorrido web requiere recepción, extracción segura, edición, ZIP y extrac
 
 ## Comprobaciones de esta iteración
 
-- 14 pruebas automáticas correctas en Windows con Python 3.13.
+- 20 pruebas automáticas correctas en Windows con Python 3.13.
 - Copia y diagnóstico sobre una copia de una bóveda real, con preservación comprobada de sus flujos NTFS; sin reorganizar las notas reales.
 - Ejemplo ficticio de entrega: agrupación temática, Sin clasificar, duplicado íntegro conservado bajo demanda, diez notas indexadas, carpeta independiente y ZIP extraído idéntico por SHA-256.
 - Pendientes: entrevista con una persona real, recorrido completo en una IA web concreta, sesión de contexto limpio y revisión visual.

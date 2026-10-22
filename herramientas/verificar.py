@@ -16,10 +16,12 @@ import argparse
 import csv
 import hashlib
 import json
+import posixpath
 import re
 import subprocess
 import sys
 from pathlib import Path, PurePosixPath
+from urllib.parse import quote, unquote
 
 import indice_lineas
 
@@ -49,8 +51,68 @@ def ruta_relativa(ruta):
             and not PurePosixPath(ruta).is_absolute() and ".." not in PurePosixPath(ruta).parts)
 
 
-def contenido_conservado(origen, destino):
-    if origen.read_bytes() == destino.read_bytes():
+def normalizar_enlaces(texto, nota, archivos, movimientos):
+    """Contrasta destinos equivalentes; no modifica notas ni dispensa texto o etiquetas."""
+    def destino(target, wiki=False):
+        if re.match(r"^[a-zA-Z][a-zA-Z0-9+.-]*:|^//", target):
+            return "externo:" + quote(target, safe="")
+        ruta, marca, fragmento = target.partition("#")
+        ruta = unquote(ruta)
+        relativa = posixpath.normpath(posixpath.join(posixpath.dirname(nota), ruta)) if ruta else nota
+        opciones = [ruta.lstrip("/"), relativa] if wiki and ruta else [relativa]
+        if ruta.startswith("/"):
+            opciones = [ruta.lstrip("/")]
+        for opcion in opciones:
+            for candidata in (opcion, opcion + ".md") if wiki else (opcion,):
+                if candidata in archivos:
+                    return "resuelto:" + quote(movimientos.get(candidata, candidata), safe="/") + marca + quote(fragmento, safe="")
+        if wiki and ruta:
+            coincidencias = [p for p in archivos if p.endswith("/" + ruta) or p.endswith("/" + ruta + ".md")]
+            if len(coincidencias) == 1:
+                return "resuelto:" + quote(movimientos.get(coincidencias[0], coincidencias[0]), safe="/") + marca + quote(fragmento, safe="")
+        return "sin-resolver:" + quote(target, safe="")
+
+    def wiki(match):
+        target, separador, etiqueta = match.group(2).partition("|")
+        return match.group(1) + destino(target, wiki=True) + separador + etiqueta + "]]"
+
+    def markdown(match):
+        target = match.group(2)
+        angulos = target.startswith("<") and target.endswith(">")
+        canonico = destino(target[1:-1] if angulos else target)
+        return match.group(1) + "(" + canonico + (match.group(3) or "") + ")"
+
+    def fragmento(t):
+        t = re.sub(r"(!?\[\[)([^\]\n]+)\]\]", wiki, t)
+        return re.sub(r"(!?\[[^\]\n]*\])\((<[^>\n]+>|[^\s()]+)([ \t]+[\"'][^\n]*[\"'])?\)", markdown, t)
+
+    def sin_codigo_inline(t):
+        partes, desde = [], 0
+        for m in re.finditer(r"(?<!`)(`+)(?!`)(.*?)(?<!`)\1(?!`)", t, flags=re.S):
+            partes.extend((fragmento(t[desde:m.start()]), m.group(0)))
+            desde = m.end()
+        return "".join(partes) + fragmento(t[desde:])
+
+    salida, pendiente, cerca = [], [], None
+    for linea in texto.splitlines(keepends=True):
+        m = indice_lineas.CERCA.match(linea)
+        if cerca:
+            salida.append(linea)
+            if m and m.group(1)[0] == cerca[0] and len(m.group(1)) >= cerca[1] and not m.group(2).strip():
+                cerca = None
+        elif m or linea.startswith(("    ", "\t")):
+            salida.extend((sin_codigo_inline("".join(pendiente)), linea))
+            pendiente = []
+            if m:
+                cerca = (m.group(1)[0], len(m.group(1)))
+        else:
+            pendiente.append(linea)
+    return "".join(salida) + sin_codigo_inline("".join(pendiente))
+
+
+def contenido_conservado(origen, destino, enlaces=None):
+    iguales = origen.read_bytes() == destino.read_bytes()
+    if iguales and (not enlaces or origen.suffix.lower() != ".md"):
         return True
     if origen.suffix.lower() != ".md" or destino.suffix.lower() != ".md":
         return False
@@ -69,9 +131,12 @@ def contenido_conservado(origen, destino):
             del lineas[pm]
         return "\n".join(lineas).strip("\n")
     try:
-        return sin_indice(origen) == sin_indice(destino)
+        antes, despues = sin_indice(origen), sin_indice(destino)
+        if enlaces:
+            antes, despues = enlaces[0](antes), enlaces[1](despues)
+        return antes == despues
     except (ValueError, UnicodeDecodeError):
-        return False
+        return iguales
 
 
 def main():
@@ -96,6 +161,8 @@ def main():
             p.error("Movimientos: usar rutas relativas sin escapes y destinos únicos.")
         if not all(o in esperados and d in esperados and o in original for o, d in movimientos.items()):
             p.error("Cada movimiento debe estar en el manifiesto y ambas rutas en el plan.")
+        if any(d in original and d != o and d not in movimientos for o, d in movimientos.items()):
+            p.error("Un destino estaba ocupado: su contenido original también debe conservarse en un movimiento trazado.")
     falla = False
 
     base = {k: v for k, v in original.items() if ":" not in k}
@@ -119,8 +186,12 @@ def main():
 
     incorrectos = []
     for origen, destino in movimientos.items():
+        enlaces = (
+            lambda t, n=origen: normalizar_enlaces(t, n, base, movimientos),
+            lambda t, n=destino: normalizar_enlaces(t, n, actual, {}),
+        )
         if (destino not in actual or not (respaldo / origen).is_file()
-                or not contenido_conservado(respaldo / origen, boveda / destino)):
+                or not contenido_conservado(respaldo / origen, boveda / destino, enlaces)):
             incorrectos.append(origen)
     falla |= bool(incorrectos)
     print(f"[{'ok' if not incorrectos else 'falla'}] movimientos: "
