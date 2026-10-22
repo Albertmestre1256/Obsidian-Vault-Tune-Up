@@ -29,11 +29,11 @@ El recorrido web requiere recepción, extracción segura, edición, ZIP y extrac
 - 21 pruebas automáticas correctas en Windows con Python 3.13.
 - Copia y diagnóstico sobre una copia de una bóveda real, con preservación comprobada de sus flujos NTFS; sin reorganizar las notas reales.
 - Ejemplo ficticio de entrega: agrupación temática, Sin clasificar, duplicado íntegro conservado bajo demanda, diez notas indexadas, carpeta independiente y ZIP extraído idéntico por SHA-256.
-- Pendientes: entrevista con una persona real, recorrido completo en una IA web concreta, sesión de contexto limpio y revisión visual.
+- Pendientes: pruebas de aceptación completas con otros usuarios, recorrido completo en una IA web concreta, sesión de contexto limpio y revisión visual.
 
 ## Ensayo temático sobre una copia real
 
-Con agrupaciones y reglas acordadas antes de actuar: nueve nodos reorganizados, 101 archivos con movimiento trazado, 344 destinos de enlaces reparados y 1.102 entradas originales conservadas, incluidos dos flujos NTFS. El original y el respaldo permanecieron idénticos a la captura.
+Con entrevista y aprobación real de agrupaciones y reglas por el dueño de la bóveda antes de actuar: nueve nodos reorganizados, 101 archivos con movimiento trazado, 344 destinos de enlaces reparados y 1.102 entradas originales conservadas, incluidos dos flujos NTFS. El original y el respaldo permanecieron idénticos a la captura.
 
 Resultado parcial: cinco enlaces rotos preexistentes y 62 referencias ahora desactualizadas en fuentes, reportes e historial protegidos que no se modificaron. El verificador distingue navegación pendiente de pérdida de contenido. Hay dos excepciones de índice y dos diferencias con el comprobador heredado. No se acredita una sesión de contexto limpio ni revisión visual.
 
