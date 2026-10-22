@@ -1,4 +1,4 @@
-"""Fase 3 del kit de adaptación: copia una bóveda y verifica la copia con un manifiesto SHA-256.
+"""Paso 5: crea una copia independiente y la verifica con un manifiesto SHA-256.
 
 Uso: python -B respaldo.py <boveda> <carpeta-de-respaldo-nueva> <carpeta-de-trabajo>
 
@@ -21,13 +21,16 @@ def flujos_alternativos(raiz):
     """Devuelve [(ruta_relativa, flujo)] de los flujos alternativos (solo Windows)."""
     if os.name != "nt":
         return []
-    ps = ("[Console]::OutputEncoding=[Text.Encoding]::UTF8; "
-          f"Get-ChildItem -LiteralPath '{raiz}' -Recurse -File -Force | "
+    ruta_ps = str(raiz).replace("'", "''")
+    ps = ("$ErrorActionPreference='Stop'; [Console]::OutputEncoding=[Text.Encoding]::UTF8; "
+          f"Get-ChildItem -LiteralPath '{ruta_ps}' -Recurse -File -Force | "
           "ForEach-Object { Get-Item -LiteralPath $_.FullName -Stream * } | "
           "Where-Object { $_.Stream -ne ':$DATA' -and $_.Stream -ne 'Zone.Identifier' } | "
           "ForEach-Object { $_.FileName + '|' + $_.Stream }")
     r = subprocess.run(["powershell", "-NoProfile", "-Command", ps],
                        capture_output=True, text=True, encoding="utf-8")
+    if r.returncode:
+        raise OSError("No se pudo comprobar el inventario de flujos NTFS.")
     salida = []
     for linea in (r.stdout or "").splitlines():
         if "|" in linea:
@@ -59,8 +62,13 @@ def main():
         print("El respaldo y la carpeta de trabajo deben estar fuera de la bóveda.")
         return 1
     trabajo.mkdir(parents=True, exist_ok=True)
+    m_orig = manifiesto(origen)
     shutil.copytree(origen, destino)
-    m_orig, m_copia = manifiesto(origen), manifiesto(destino)
+    # copytree no conserva ADS en todas las versiones de Python/Windows.
+    for clave in (ruta for ruta in m_orig if ":" in ruta):
+        ruta, flujo = clave.rsplit(":", 1)
+        Path(f"{destino / ruta}:{flujo}").write_bytes(Path(f"{origen / ruta}:{flujo}").read_bytes())
+    m_despues, m_copia = manifiesto(origen), manifiesto(destino)
     with open(trabajo / "manifiesto-original.csv", "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         w.writerow(["ruta", "bytes", "sha256"])
@@ -70,14 +78,20 @@ def main():
     sobran = sorted(set(m_copia) - set(m_orig))
     distintos = sorted(r for r in set(m_orig) & set(m_copia) if m_orig[r] != m_copia[r])
     ocultos = [r for r in m_orig if ":" in r]
+    estable = m_orig == m_despues
     print(f"original={len(m_orig)} copia={len(m_copia)} faltan={len(faltan)} sobran={len(sobran)} "
-          f"distintos={len(distintos)} flujos_alternativos={len(ocultos)}")
+          f"distintos={len(distintos)} flujos_alternativos={len(ocultos)} origen_estable={estable}")
+    if not estable:
+        print("El origen cambió durante la captura; no usar esta copia para transformar la bóveda.")
     for r in (faltan + sobran + distintos)[:20]:
         print("  diferencia:", r)
     for r in ocultos:
         print("  flujo alternativo (contenido oculto):", r)
-    return 0 if not (faltan or sobran or distintos) else 2
+    return 0 if estable and not (faltan or sobran or distintos) else 2
 
 
 if __name__ == "__main__":
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8")
     sys.exit(main())

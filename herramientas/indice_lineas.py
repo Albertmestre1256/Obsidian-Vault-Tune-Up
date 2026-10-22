@@ -18,8 +18,8 @@ Uso:
 - check no escribe: lista cada nota sin índice (FALTA), con rangos viejos
   (DESACTUALIZADO) u omitida (OMITIDA: no es UTF-8), y un resumen.
 - apply solo trabaja sobre las notas que se le pasan: así se respeta el plan aprobado.
-- Si el índice ya existe con la misma cantidad de secciones, conserva sus descripciones
-  y su encabezado (plegable «[!info]-» o abierto «[!info]»); solo actualiza los números.
+- Conserva descripciones de hasta diez palabras y la forma del índice existente.
+  Las descripciones largas se acortan sin cambiar los títulos ni el cuerpo.
 - Un índice nuevo es plegable, salvo con --abierto.
 """
 import argparse
@@ -34,6 +34,16 @@ ES_ENCABEZADO = re.compile(r"^> \[!info\]-? Índice de esta nota")
 IGNORAR = {"_archivo", "node_modules", "__pycache__", "venv", ".venv"}
 TITULO = re.compile(r"^(#{1,6})\s+(.+?)\s*#*\s*$")
 ENTRADA = re.compile(r"^>\s*-\s*Líneas\s+(\d+)\s*[–-]\s*(\d+):\s*(.*)$")
+CERCA = re.compile(r"^ {0,3}(`{3,}|~{3,})(.*)$")
+MAX_PALABRAS = 10
+
+
+def descripcion_breve(texto):
+    # No cortar un enlace por la mitad al abreviar su etiqueta en el índice.
+    texto = re.sub(r"!?\[\[([^\]]+)\]\]", lambda m: m.group(1).split("|")[-1], texto)
+    texto = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", texto)
+    palabras = texto.split()
+    return texto if len(palabras) <= MAX_PALABRAS else " ".join(palabras[:MAX_PALABRAS])
 
 
 def leer(ruta):
@@ -72,12 +82,18 @@ def buscar_bloque(lineas, desde):
 
 
 def secciones(cuerpo, nivel):
-    salida, en_codigo = [], False
+    salida, cerca = [], None
     for i, linea in enumerate(cuerpo):
-        if linea.strip().startswith("```"):
-            en_codigo = not en_codigo
+        m_cerca = CERCA.match(linea)
+        if cerca:
+            if (m_cerca and m_cerca.group(1)[0] == cerca[0]
+                    and len(m_cerca.group(1)) >= cerca[1] and not m_cerca.group(2).strip()):
+                cerca = None
             continue
-        m = None if en_codigo else TITULO.match(linea)
+        if m_cerca:
+            cerca = (m_cerca.group(1)[0], len(m_cerca.group(1)))
+            continue
+        m = TITULO.match(linea)
         if m and len(m.group(1)) <= nivel:
             salida.append((i, m.group(2).strip()))
     return salida
@@ -104,7 +120,7 @@ def armar(pm, previo, resto, encabezado, viejas, nivel, con_previo):
     filas = [(d, a, b) for d, a, b in fijas] + [(t, inicio_cuerpo + s, inicio_cuerpo + e) for t, s, e in entradas]
     if viejas is not None and len(viejas) == len(filas):
         filas = [(v, a, b) for v, (_, a, b) in zip(viejas, filas)]
-    bloque = [encabezado] + [f"> - Líneas {a}–{b}: {d}" for d, a, b in filas]
+    bloque = [encabezado] + [f"> - Líneas {a}–{b}: {descripcion_breve(d)}" for d, a, b in filas]
     return bloque, len(filas)
 
 
@@ -192,6 +208,7 @@ def main(argv=None):
 
 
 if __name__ == "__main__":
-    if hasattr(sys.stdout, "reconfigure"):
-        sys.stdout.reconfigure(encoding="utf-8")
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8")
     sys.exit(main())

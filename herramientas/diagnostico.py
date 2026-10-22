@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fase 1: diagnóstico de solo lectura de una bóveda de Obsidian. Python estándar 3.8+.
+"""Paso 2: diagnóstico de solo lectura de una bóveda de Obsidian. Python estándar 3.8+.
 
 Uso:
     python -B diagnostico.py <boveda> <salida.json> [--referencia ATOMO.md]
@@ -314,6 +314,7 @@ def main():
 
 
 if __name__ == "__main__":
-    if hasattr(sys.stdout, "reconfigure"):
-        sys.stdout.reconfigure(encoding="utf-8")
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8")
     main()

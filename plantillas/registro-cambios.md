@@ -10,7 +10,7 @@ inicio: <AAAA-MM-DD HH:MM con zona>
 
 # Registro de cambios
 
-Una fila por bloque de cambios. Las filas no se editan ni se borran: es historia. Si la bóveda ya tenía un registro con otra política de rotación, manda esa.
+Una fila por bloque de cambios. Las filas no se editan ni se borran: es historia. Si existe otra política de rotación, conservarla y plantear cualquier cambio a la persona antes de aplicarlo; esta adaptación no autoriza purgar contenido.
 
 | Fecha y hora (con zona) | Autor | Acción | Qué cambió | Aprobó | Verificación |
 |---|---|---|---|---|---|
