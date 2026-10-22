@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+# Carpetas de trabajo y respaldos de quien usa el kit: pueden tener datos privados
+trabajo/
+respaldo*/
+.DS_Store
+Thumbs.db
