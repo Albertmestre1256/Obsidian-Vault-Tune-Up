@@ -18,6 +18,7 @@ sys.dont_write_bytecode = True
 import indice_lineas  # noqa: E402
 import respaldo  # noqa: E402
 import verificar  # noqa: E402
+import diagnostico  # noqa: E402
 
 
 def correr(script, *args):
@@ -71,6 +72,23 @@ class BovedaDesordenada(unittest.TestCase):
         r = correr("verificar.py", self.boveda, self.tmp / "respaldo", self.trabajo, self.esperados)
         self.assertEqual(r.returncode, 2, r.stdout)
         self.assertIn("ideas sueltas.md", r.stdout)
+
+    def test_el_diagnostico_no_lee_notas_excluidas(self):
+        protegida = escribir(self.boveda, "no-leer.md", "Contenido ficticio fuera del alcance.\n")
+        self.trabajo.mkdir()
+        salida = self.trabajo / "diagnostico-datos.json"
+        leer_real = Path.read_text
+
+        def leer_solo_permitido(path, *args, **kw):
+            if path.resolve() == protegida.resolve():
+                raise AssertionError("La nota excluida no debe abrirse")
+            return leer_real(path, *args, **kw)
+
+        argv = ["diagnostico.py", str(self.boveda), str(salida), "--excluir", "no-leer.md"]
+        with mock.patch.object(sys, "argv", argv), mock.patch.object(Path, "read_text", leer_solo_permitido), mock.patch("builtins.print"):
+            diagnostico.main()
+        datos = json.loads(salida.read_text(encoding="utf-8"))
+        self.assertIn("no-leer.md", datos["inventario"]["notas_no_leidas"])
 
     def test_movimiento_a_sin_clasificar_conserva_contenido(self):
         permitidos = self.preparar_verificacion()
@@ -142,7 +160,10 @@ class BovedaDesordenada(unittest.TestCase):
         mapa.write_text(json.dumps({origen: destino}), encoding="utf-8")
         args = (self.boveda, self.tmp / "respaldo", self.trabajo, self.esperados, "--movimientos", mapa)
         # Mismo texto tras mover, pero enlace relativo ahora roto: no alcanza comparar bytes.
-        self.assertEqual(correr("verificar.py", *args).returncode, 2)
+        roto = correr("verificar.py", *args)
+        self.assertEqual(roto.returncode, 2)
+        self.assertIn("contenido no conservado: 0", roto.stdout)
+        self.assertIn("[revisar] enlaces de notas movidas: 1", roto.stdout)
         nota.write_text(texto.replace("(adjuntos/fuente.pdf)", "(../adjuntos/fuente.pdf)"), encoding="utf-8")
         r = correr("verificar.py", *args)
         self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
@@ -256,6 +277,9 @@ class ConservacionDeEnlaces(unittest.TestCase):
         self.assertNotEqual(normalizar("[a](a%23x.md)"), normalizar("[a](a#x.md)"))
         self.assertNotEqual(normalizar("[[plan|Etiqueta]]"), normalizar("[[plan|Otra etiqueta]]"))
         self.assertNotEqual(normalizar("[[plan#Uno]]"), normalizar("[[plan#Dos]]"))
+        antes = verificar.normalizar_enlaces("[[plan\\|Etiqueta]]", "nota.md", archivos, {"plan.md": "Datos/plan.md"})
+        despues = verificar.normalizar_enlaces("[[Datos/plan\\|Etiqueta]]", "nota.md", {"Datos/plan.md"}, {})
+        self.assertEqual(antes, despues)
 
     def test_movimiento_utf16_identico_conserva_bytes_sin_convertir(self):
         with tempfile.TemporaryDirectory() as carpeta:

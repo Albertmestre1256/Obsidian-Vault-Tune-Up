@@ -74,7 +74,8 @@ def normalizar_enlaces(texto, nota, archivos, movimientos):
 
     def wiki(match):
         target, separador, etiqueta = match.group(2).partition("|")
-        return match.group(1) + destino(target, wiki=True) + separador + etiqueta + "]]"
+        escape = "\\" if separador and target.endswith("\\") else ""
+        return match.group(1) + destino(target[:-1] if escape else target, wiki=True) + escape + separador + etiqueta + "]]"
 
     def markdown(match):
         target = match.group(2)
@@ -184,18 +185,26 @@ def main():
         print("    Si nadie más editó la bóveda, son cambios fuera del plan. Si otra sesión o persona "
               "la editó, pará y compará con ella antes de seguir.")
 
-    incorrectos = []
+    incorrectos, enlaces_pendientes = [], []
     for origen, destino in movimientos.items():
         enlaces = (
             lambda t, n=origen: normalizar_enlaces(t, n, base, movimientos),
             lambda t, n=destino: normalizar_enlaces(t, n, actual, {}),
         )
-        if (destino not in actual or not (respaldo / origen).is_file()
-                or not contenido_conservado(respaldo / origen, boveda / destino, enlaces)):
+        if destino not in actual or not (respaldo / origen).is_file():
             incorrectos.append(origen)
-    falla |= bool(incorrectos)
+        elif not contenido_conservado(respaldo / origen, boveda / destino, enlaces):
+            if contenido_conservado(respaldo / origen, boveda / destino):
+                enlaces_pendientes.append(origen)
+            else:
+                incorrectos.append(origen)
+    falla |= bool(incorrectos) or bool(enlaces_pendientes)
     print(f"[{'ok' if not incorrectos else 'falla'}] movimientos: "
           f"{len(movimientos)} declarados; contenido no conservado: {incorrectos or 0}")
+    print(f"[{'ok' if not enlaces_pendientes else 'revisar'}] enlaces de notas movidas: "
+          f"{len(enlaces_pendientes)} archivos conservan su texto pero cambió el destino o la resolución de un enlace")
+    for ruta in enlaces_pendientes[:10]:
+        print("    revisar navegación:", ruta)
 
     tocadas = [r for r in cambiados + nuevos + faltan if PROTEGIDAS.search(r) and r not in esperados]
     falla |= bool(tocadas)

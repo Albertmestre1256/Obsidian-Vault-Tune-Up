@@ -94,7 +94,7 @@ def main():
 
     textos = {}
     for r, x in rels.items():
-        if r.endswith(".md"):
+        if r.endswith(".md") and es_propia(r):
             try:
                 textos[r] = x.read_text(encoding="utf-8-sig")
             except UnicodeDecodeError:
@@ -112,7 +112,8 @@ def main():
         "por_extension": dict(collections.Counter((x.suffix.lower() or "(sin)") for x in todos).most_common()),
         "raiz_archivos": sorted(r for r in rels if "/" not in r),
         "carpetas_ocultas": sorted(x.name for x in raiz.iterdir() if x.is_dir() and x.name.startswith(".")),
-        "notas_md": len(textos),
+        "notas_md": sum(r.endswith(".md") for r in rels),
+        "notas_no_leidas": sorted(r for r in rels if r.endswith(".md") and r not in textos),
         "notas_propias": len(propias),
         "no_utf8": sorted(r for r, t in textos.items() if t is None),
         "nombres_invalidos_windows": sorted(r for r in rels if NOMBRE_INVALIDO.search(r)),
@@ -124,7 +125,7 @@ def main():
         "atomo_existe": atomo.exists(),
         "instrucciones_en_raiz": sorted(r for r in rels if "/" not in r and r.upper() in INSTRUCCIONES),
     }
-    if atomo.exists() and a.referencia and Path(a.referencia).exists():
+    if atomo.exists() and es_propia(ATOMO) and a.referencia and Path(a.referencia).exists():
         d["reglas"]["atomo_igual_a_referencia"] = (
             hashlib.sha256(atomo.read_bytes()).digest() == hashlib.sha256(Path(a.referencia).read_bytes()).digest())
 
@@ -245,8 +246,8 @@ def main():
     }
 
     # 9. Peso de contexto
-    arranque = [x for x in (ATOMO, piezas["entrada"], piezas["mapa"]) if x and x in rels]
-    total = sum(len(texto(x) or rels[x].read_text(encoding="utf-8-sig", errors="replace")) for x in arranque)
+    arranque = [x for x in (ATOMO, piezas["entrada"], piezas["mapa"]) if x and x in textos]
+    total = sum(len(texto(x)) for x in arranque)
     tablas = [l for l in texto(piezas["mapa"]).splitlines() if l.startswith("|")]
     d["contexto"] = {
         "arranque": {x: len(texto(x)) for x in arranque},
