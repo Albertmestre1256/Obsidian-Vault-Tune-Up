@@ -8,6 +8,6 @@
 
 - `python -B herramientas/indice_lineas.py check --boveda <copia> --excluir '<patrón acordado>'`
 - `python -B herramientas/indice_lineas.py apply <nota1> <nota2> ...`
-- Repetir `check`. El script conserva el cuerpo y limita descripciones a diez palabras; la IA revisa su sentido. No cambiar el texto para ajustar el índice.
+- Repetir `check`. El script conserva el cuerpo y limita descripciones a diez palabras; la IA revisa su sentido. Un `OK` demuestra consistencia con el recálculo, no que una descripción heredada identifique el rango correcto. Comparar cada descripción con el contenido real de su rango, especialmente si cambió la estructura o hay cercas de código anidadas. La misma cantidad de entradas no garantiza las mismas secciones. Corregir la descripción cuando haga falta, sin modificar cuerpos protegidos ni sus herramientas para hacer pasar el chequeo. No cambiar el texto para ajustar el índice.
 
 Sin Python, usar números de línea de las herramientas, escribir el índice y volver a leer el archivo numerado para comprobar rangos. No estimar posiciones ni afirmar exactitud sin revisión. Recalcular los ejemplos de las plantillas después de completar sus datos.

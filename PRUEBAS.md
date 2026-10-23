@@ -35,6 +35,14 @@ El recorrido web requiere recepción, extracción segura, edición, ZIP y extrac
 
 Con entrevista y aprobación real de agrupaciones y reglas por el dueño de la bóveda antes de actuar: nueve nodos reorganizados, 101 archivos con movimiento trazado, 344 destinos de enlaces reparados y 1.102 entradas originales conservadas, incluidos dos flujos NTFS. El original y el respaldo permanecieron idénticos a la captura.
 
-Resultado parcial: cinco enlaces rotos preexistentes y 62 referencias ahora desactualizadas en fuentes, reportes e historial protegidos que no se modificaron. El verificador distingue navegación pendiente de pérdida de contenido. Hay dos excepciones de índice y dos diferencias con el comprobador heredado. No se acredita una sesión de contexto limpio ni revisión visual.
+Resultado parcial: tras una excepción explícita aprobada por el dueño, se repararon 62 destinos adicionales en 23 notas protegidas, con versiones previas, etiquetas y cuerpos conservados; el total es 406 destinos corregidos. Quedan cinco referencias preexistentes en el diagnóstico del alcance y una referencia archivada detectada por la comparación de movimientos, fuera de esos 62 cambios. Hay dos excepciones de índice y dos diferencias con el comprobador heredado. No se acredita una sesión de contexto limpio ni revisión visual.
 
 En un recorrido documental definido, incluyendo reglas complementarias, molécula, mapa por rangos, tema, nodo y ficha, se midieron 44.154 → 36.649 caracteres (17 % menos). Es una medición de ese recorrido; no tokens reales de API ni una garantía general. La lectura completa de los tres archivos raíz aumentó. No se publican la bóveda ni sus evidencias privadas.
+
+## Revisión posterior de índices y referencias
+
+En dos protocolos, cercas de código anidadas produjeron segmentaciones distintas entre el auxiliar y el comprobador heredado. Se corrigió una descripción heredada que apuntaba a otro contenido, conservando el cuerpo y sus rangos. Las dos diferencias de compatibilidad siguen declaradas; no se modificaron cercas ni herramientas de la bóveda. La consistencia del recálculo no prueba el sentido de una descripción, y la orden del paso 9 ahora exige contrastarlo expresamente.
+
+La excepción para los 62 destinos incluyó comprobación de archivos de destino, hashes contra cambios concurrentes, versiones previas por nota y comparación exacta de cambios de enlaces e índices. Las cinco referencias preexistentes y la referencia archivada pendiente quedan fuera de la excepción.
+
+En el cierre aparecieron dos diferencias de estado de interfaz en la copia (escala del gráfico y paneles), preservadas sin restaurar. El comprobador estricto conserva esas diferencias declaradas: 938 entradas idénticas y 162 transformaciones demostradas, cero faltantes; las otras dos entradas siguen recuperables en el respaldo íntegro. La comparación actual del original muestra diferencias solo en esos dos archivos de interfaz; no hubo escritura del agente en el original y no se atribuye la autoría de esos cambios. No se certifica igualdad total de configuración.
