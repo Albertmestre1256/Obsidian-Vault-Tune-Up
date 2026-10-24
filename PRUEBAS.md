@@ -46,3 +46,9 @@ En dos protocolos, cercas de código anidadas produjeron segmentaciones distinta
 La excepción para los 62 destinos incluyó comprobación de archivos de destino, hashes contra cambios concurrentes, versiones previas por nota y comparación exacta de cambios de enlaces e índices. Las cinco referencias preexistentes y la referencia archivada pendiente quedan fuera de la excepción.
 
 En el cierre aparecieron dos diferencias de estado de interfaz en la copia (escala del gráfico y paneles), preservadas sin restaurar. El comprobador estricto conserva esas diferencias declaradas: 938 entradas idénticas y 162 transformaciones demostradas, cero faltantes; las otras dos entradas siguen recuperables en el respaldo íntegro. La comparación actual del original muestra diferencias solo en esos dos archivos de interfaz; no hubo escritura del agente en el original y no se atribuye la autoría de esos cambios. No se certifica igualdad total de configuración.
+
+## Medición reproducible de eficiencia
+
+El [protocolo de evaluación](evaluacion/PROTOCOLO.md) separa conservación, calidad y coste; compara antes/después con tareas pareadas y sesiones nuevas. Distingue el estudio del kit completo de los ensayos de referencias e índices. Incluye coste de organización y mantenimiento, intentos fallidos, caché, datos faltantes y límites estadísticos. Las plantillas de [preregistro](evaluacion/preregistro.json) e [intento](evaluacion/intento.json) se completan antes de ejecutar.
+
+Es una metodología preparada, no un ensayo de modelos ya realizado. La evaluación principal usa archivos y trazas; no requiere control visual de la computadora. La revisión visual opcional evalúa presentación y no demuestra eficiencia.

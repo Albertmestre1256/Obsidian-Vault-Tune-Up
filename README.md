@@ -59,6 +59,8 @@ La copia debe conservar la información, respetar las agrupaciones y reglas apro
 
 La IA compara antes y después: contexto necesario para una misma consulta, repeticiones retiradas del recorrido activo, enlaces y conservación. Informa si no hubo ahorro. Caracteres / 4 es solo una estimación de tokens; no demuestra ahorro real en todas las tareas. La lectura y escritura deben poder hacerse sin cargar la bóveda completa; después de editar se actualiza el índice correspondiente.
 
+Para medir eficiencia de forma auditable, usar el [protocolo de evaluación](evaluacion/PROTOCOLO.md): calidad y consumo en las mismas tareas, sesiones nuevas, costes de preparación y mantenimiento, y resultados reproducibles. Una reducción del grafo no acredita ahorro de tokens.
+
 ## Herramientas auxiliares
 
 La IA puede usar herramientas equivalentes de su entorno. Estos scripts usan solo Python estándar 3.8+, sin dependencias; los ejecuta la IA, no la persona.
@@ -74,7 +76,7 @@ Ver [pruebas y límites](PRUEBAS.md). Para desarrollar: `python -B -m unittest d
 
 ## Estado
 
-**v0.3 en desarrollo.** El flujo adapta los objetivos acordados: copia independiente, entrevista temática, reglas aprobadas, Sin clasificar, conservación y contexto reducido. Las capacidades de la IA web dependen de su entorno. Las pruebas automáticas y locales no sustituyen una prueba completa con personas, una sesión de contexto limpio ni la revisión visual en Obsidian.
+**v0.3 en desarrollo.** El flujo adapta los objetivos acordados: copia independiente, entrevista temática, reglas aprobadas, Sin clasificar, conservación y contexto reducido. Las capacidades de la IA web dependen de su entorno. Las pruebas automáticas y locales no sustituyen una prueba completa con personas ni una sesión de contexto limpio. La evaluación de eficiencia usa archivos y trazas; la inspección visual es opcional para valorar presentación.
 
 ## Licencia
 
