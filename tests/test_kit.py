@@ -344,5 +344,81 @@ class IndiceDeLineas(unittest.TestCase):
         self.assertEqual(entradas[-1], "Uno dos tres cuatro cinco seis siete ocho nueve diez")
 
 
+class LecturaConfinada(unittest.TestCase):
+    """Servidor MCP de evaluación: solo lee dentro de su raíz y no expone escritura."""
+
+    @classmethod
+    def setUpClass(cls):
+        import importlib.util
+        ruta = Path(__file__).resolve().parent.parent / "evaluacion" / "servidor_lectura_boveda.py"
+        spec = importlib.util.spec_from_file_location("servidor_lectura_boveda", ruta)
+        cls.servidor = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cls.servidor)
+
+    def setUp(self):
+        self.raiz_tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.raiz_tmp.cleanup)
+        self.raiz = Path(self.raiz_tmp.name).resolve()
+        (self.raiz / "Notas").mkdir()
+        (self.raiz / "Notas" / "uno.md").write_text("# Uno\n\nCódigo de control: ABC\n", encoding="utf-8")
+        self.afuera_tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.afuera_tmp.cleanup)
+        self.afuera = Path(self.afuera_tmp.name).resolve()
+        (self.afuera / "clave.md").write_text("no debe leerse\n", encoding="utf-8")
+
+    def llamar(self, nombre, args):
+        msg = {"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": nombre, "arguments": args}}
+        return self.servidor.responder(msg, self.raiz)["result"]
+
+    def test_lee_por_rango_y_busca_con_numeracion(self):
+        leido = self.llamar("leer_archivo", {"ruta": "Notas/uno.md", "desde": 3, "hasta": 3})
+        self.assertFalse(leido["isError"])
+        self.assertEqual(leido["content"][0]["text"], "3: Código de control: ABC")
+        hallado = self.llamar("buscar_texto", {"texto": "control"})
+        self.assertIn("Notas/uno.md:3: Código de control: ABC", hallado["content"][0]["text"])
+
+    def test_rutas_que_salen_de_la_raiz_se_rechazan(self):
+        relativa = f"../{self.afuera.name}/clave.md"
+        absoluta = str(self.afuera / "clave.md")
+        r1 = self.llamar("leer_archivo", {"ruta": relativa})
+        r2 = self.llamar("leer_archivo", {"ruta": absoluta})
+        self.assertTrue(r1["isError"])
+        self.assertIn("fuera de la bóveda", r1["content"][0]["text"])
+        self.assertTrue(r2["isError"])
+        self.assertIn("absoluta no permitida", r2["content"][0]["text"])
+
+    def test_enlace_simbolico_que_sale_de_la_raiz_se_rechaza(self):
+        try:
+            (self.raiz / "enlace.md").symlink_to(self.afuera / "clave.md")
+        except (OSError, NotImplementedError):
+            self.skipTest("sin permiso para crear enlaces simbólicos en esta máquina")
+        resultado = self.llamar("leer_archivo", {"ruta": "enlace.md"})
+        self.assertTrue(resultado["isError"])
+        self.assertNotIn("no debe leerse", resultado["content"][0]["text"])
+
+    def test_archivo_grande_exige_rango(self):
+        (self.raiz / "grande.md").write_text("x\n" * (self.servidor.MAX_BYTES // 2 + 10), encoding="utf-8")
+        resultado = self.llamar("leer_archivo", {"ruta": "grande.md"})
+        self.assertTrue(resultado["isError"])
+        self.assertIn("rango", resultado["content"][0]["text"])
+
+    def test_no_hay_herramienta_de_escritura(self):
+        msg = {"jsonrpc": "2.0", "id": 9, "method": "tools/call",
+               "params": {"name": "escribir_archivo", "arguments": {"ruta": "Notas/nuevo.md"}}}
+        respuesta = self.servidor.responder(msg, self.raiz)
+        self.assertIn("error", respuesta)
+        self.assertIn("herramienta desconocida", respuesta["error"]["message"])
+        self.assertFalse((self.raiz / "Notas" / "nuevo.md").exists())
+
+    def test_protocolo_lista_solo_herramientas_de_lectura(self):
+        inicio = self.servidor.responder({"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {}}, self.raiz)
+        self.assertIn("protocolVersion", inicio["result"])
+        lista = self.servidor.responder({"jsonrpc": "2.0", "id": 2, "method": "tools/list"}, self.raiz)
+        nombres = {h["name"] for h in lista["result"]["tools"]}
+        self.assertEqual(nombres, {"listar_directorio", "leer_archivo", "buscar_texto"})
+        notificacion = {"jsonrpc": "2.0", "method": "notifications/initialized"}
+        self.assertIsNone(self.servidor.responder(notificacion, self.raiz))
+
+
 if __name__ == "__main__":
     unittest.main()

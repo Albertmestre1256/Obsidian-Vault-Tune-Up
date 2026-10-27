@@ -12,9 +12,9 @@
 > - Líneas 128–137: Análisis e incertidumbre
 > - Líneas 138–150: Regla de decisión y resultados incompletos
 > - Líneas 151–156: Evidencia mínima para auditar
-> - Líneas 157–165: Instrumentación sin interfaz visual
-> - Líneas 166–177: Fundamento y fuentes
-> - Líneas 178–182: Estado de las afirmaciones actuales
+> - Líneas 157–167: Instrumentación sin interfaz visual
+> - Líneas 168–179: Fundamento y fuentes
+> - Líneas 180–184: Estado de las afirmaciones actuales
 
 # Medir la eficiencia de Obsidian Vault Tune-up
 
@@ -160,6 +160,8 @@ El informe distingue tres niveles: reproducción de cálculos sobre las mismas t
 - Claude Code: admite ejecución programática y JSON/eventos. Conservar versión, salida y uso de cada intento nuevo. Sus estimaciones de coste no equivalen necesariamente a factura; no sumar acumulados de conversaciones reanudadas.
 - OpenCode: fijar versión mayor y proveedor/modelo; comprobar ayuda de la versión instalada. Guardar eventos y exportación de la sesión. La documentación de distintas versiones difiere; no dar por expuestos campos de tokens que no estén en la exportación real.
 - ChatGPT/Claude web: usar corpus ficticio, proyectos separados y configuración registrada, sin automatizar la computadora. Si no existe una exportación suficiente, dejar el estudio de tokens para una interfaz instrumentable y registrar solo calidad observable en web.
+- Lectura sin shell: si el cliente bloquea comandos de lectura, no se habilitan por fuera de la política. La vía es `evaluacion/servidor_lectura_boveda.py`: un servidor MCP de solo lectura confinado a la copia del intento, sin herramientas de escritura. Registrar en el intento qué herramienta se usó (llamadas MCP o shell) y comprobar que las llamadas de lectura aparecen en la traza; una sesión sin lectura queda como fallo de acceso, no como medición de calidad.
+- Modelo y servicio: la sesión se acepta solo si el evento de inicio reporta el identificador de modelo solicitado. Si reporta un alias, un nombre distinto o ninguno, la sesión se marca inválida y no se etiqueta con el nombre pedido. Un destino local que no escucha (conexión rechazada) se registra como fallo técnico de infraestructura, con su error, antes de cualquier reintento.
 
 Estas capacidades documentadas no implican que se hayan ejecutado modelos en esta investigación. El protocolo no instala clientes, no incorpora dependencias y no requiere contratar una plataforma de evaluación.
 
