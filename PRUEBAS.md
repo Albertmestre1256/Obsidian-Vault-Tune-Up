@@ -52,3 +52,11 @@ En el cierre aparecieron dos diferencias de estado de interfaz en la copia (esca
 El [protocolo de evaluación](evaluacion/PROTOCOLO.md) separa conservación, calidad y coste; compara antes/después con tareas pareadas y sesiones nuevas. Distingue el estudio del kit completo de los ensayos de referencias e índices. Incluye coste de organización y mantenimiento, intentos fallidos, caché, datos faltantes y límites estadísticos. Las plantillas de [preregistro](evaluacion/preregistro.json) e [intento](evaluacion/intento.json) se completan antes de ejecutar.
 
 Es una metodología preparada, no un ensayo de modelos ya realizado. La evaluación principal usa archivos y trazas; no requiere control visual de la computadora. La revisión visual opcional evalúa presentación y no demuestra eficiencia.
+
+## Revisión del lector de evaluación — 28/10/2026
+
+El lector MCP incorporado el 27/10 permite lectura de archivos dentro de la copia del intento sin habilitar comandos de shell. La revisión posterior corrigió el rechazo de rangos pequeños en notas grandes y la aceptación de rangos inválidos que producían numeración falsa. Búsqueda y listado pueden continuar con `offset`; los resultados tienen un presupuesto explícito. Los errores de codificación o recorrido no se presentan como datos ausentes, y mensajes JSON inválidos no terminan el servidor.
+
+Resultado en Windows: 36 pruebas ejecutadas, 35 correctas y una omitida por falta de permiso para crear enlaces simbólicos. La prueba con una junction NTFS sí verificó que no permite leer, listar o buscar contenido externo. La raíz debe permanecer estable; el servidor comprueba rutas, pero no constituye un sandbox de proceso contra cambios concurrentes del sistema de archivos.
+
+Esto verifica la herramienta sin llamadas a modelos. Sigue pendiente comprobar su integración en una sesión medida de Codex y resolver el servicio configurado para Claude. No demuestra ahorro de tokens ni autoriza nuevos intentos: las cuatro sesiones de calibración previas continúan agotadas.

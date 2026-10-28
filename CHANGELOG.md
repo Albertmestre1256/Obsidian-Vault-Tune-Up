@@ -1,5 +1,12 @@
 # Cambios
 
+## Revisión del lector de evaluación — 2026-10-28
+
+- Lectura real por rangos en notas grandes, validación de límites y numeración, y salida acotada.
+- Continuación con offset en búsqueda/listado; errores de codificación o acceso explícitos para no inferir ausencias falsas.
+- Recuperación del transporte stdio tras mensajes inválidos y prueba de confinamiento con junctions NTFS.
+- 36 pruebas ejecutadas: 35 correctas y una omitida por permisos de enlaces simbólicos. Sin nuevas sesiones de modelos.
+
 ## Sin publicar — 0.3-borrador (2026-10-27)
 
 - Evaluación: `evaluacion/servidor_lectura_boveda.py`, un servidor MCP de solo lectura confinado a la copia del intento. Sirve cuando el cliente bloquea comandos de lectura; no es parte del flujo de la persona usuaria.

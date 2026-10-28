@@ -402,6 +402,91 @@ class LecturaConfinada(unittest.TestCase):
         self.assertTrue(resultado["isError"])
         self.assertIn("rango", resultado["content"][0]["text"])
 
+    def test_rango_pequeno_en_archivo_grande_si_se_puede_leer(self):
+        (self.raiz / "grande.md").write_bytes(("área\n" * self.servidor.MAX_BYTES).encode("utf-8"))
+        resultado = self.llamar("leer_archivo", {"ruta": "grande.md", "desde": 2, "hasta": 3})
+        self.assertFalse(resultado["isError"])
+        self.assertEqual(resultado["content"][0]["text"], "2: área\n3: área")
+
+    def test_rangos_invalidos_no_devuelven_lineas_con_numeros_falsos(self):
+        for limites in [{"desde": 0}, {"desde": -1}, {"desde": True},
+                        {"hasta": "3"}, {"desde": 3, "hasta": 2}]:
+            with self.subTest(limites=limites):
+                resultado = self.llamar("leer_archivo", {"ruta": "Notas/uno.md", **limites})
+                self.assertTrue(resultado["isError"])
+
+    def test_busqueda_en_nota_grande_y_paginacion_sin_perder_resultados(self):
+        (self.raiz / "grande.md").write_bytes(b"relleno\n" * self.servidor.MAX_BYTES + b"aguja final\n")
+        hallado = self.llamar("buscar_texto", {"texto": "aguja final"})
+        self.assertFalse(hallado["isError"])
+        self.assertIn("aguja final", hallado["content"][0]["text"])
+        (self.raiz / "muchos.md").write_bytes(("marca\n" * 201).encode("utf-8"))
+        primera = self.llamar("buscar_texto", {"texto": "marca"})["content"][0]["text"]
+        segunda = self.llamar("buscar_texto", {"texto": "marca", "offset": 200})["content"][0]["text"]
+        self.assertIn("offset=200", primera)
+        self.assertNotIn("muchos.md:201:", primera)
+        self.assertIn("muchos.md:201: marca", segunda)
+
+    def test_respuesta_y_linea_gigante_tienen_limite_explicito(self):
+        (self.raiz / "gigante.md").write_bytes(b"x" * (self.servidor.MAX_BYTES + 1))
+        resultado = self.llamar("leer_archivo", {"ruta": "gigante.md", "desde": 1, "hasta": 1})
+        self.assertTrue(resultado["isError"])
+        with mock.patch.object(self.servidor, "MAX_BYTES", 100):
+            (self.raiz / "sumatoria.md").write_bytes(b"0123456789\n" * 20)
+            resultado = self.llamar("leer_archivo", {"ruta": "sumatoria.md", "desde": 1, "hasta": 20})
+            self.assertTrue(resultado["isError"])
+            self.assertIn("rango menor", resultado["content"][0]["text"])
+
+    def test_no_reemplaza_silenciosamente_codificacion_invalida(self):
+        (self.raiz / "codificacion.md").write_bytes(b"dato\xff\n")
+        self.assertTrue(self.llamar("leer_archivo", {"ruta": "codificacion.md"})["isError"])
+        self.assertTrue(self.llamar("buscar_texto", {"texto": "ausente"})["isError"])
+
+    def test_recorrido_incompleto_no_se_informa_como_ausencia(self):
+        def recorrido(*args, **kwargs):
+            kwargs["onerror"](PermissionError("sin acceso a una carpeta"))
+            return iter(())
+        with mock.patch.object(self.servidor.os, "walk", side_effect=recorrido):
+            resultado = self.llamar("buscar_texto", {"texto": "ausente"})
+        self.assertTrue(resultado["isError"])
+        self.assertIn("búsqueda incompleta", resultado["content"][0]["text"])
+
+    def test_directorio_paginado_y_argumentos_invalidos(self):
+        for n in range(3):
+            (self.raiz / f"archivo{n}.md").write_bytes(b"ok\n")
+        with mock.patch.object(self.servidor, "MAX_RESULTADOS", 2):
+            primera = self.llamar("listar_directorio", {"ruta": ""})["content"][0]["text"]
+            segunda = self.llamar("listar_directorio", {"ruta": "", "offset": 2})["content"][0]["text"]
+            self.assertIn("offset=2", primera)
+            self.assertNotEqual(primera.splitlines()[0], segunda.splitlines()[0])
+        for args in [{"texto": "ok", "offset": -1}, {"texto": 1}, {"texto": "ok", "otro": True}]:
+            self.assertTrue(self.llamar("buscar_texto", args)["isError"])
+
+    @unittest.skipUnless(os.name == "nt", "junctions NTFS solo en Windows")
+    def test_junction_no_permita_leer_o_buscar_fuera(self):
+        junction = self.raiz / "puente"
+        r = subprocess.run(["cmd", "/c", "mklink", "/J", str(junction), str(self.afuera)],
+                           capture_output=True)
+        if r.returncode:
+            self.skipTest("no se pudo crear una junction NTFS en la carpeta temporal")
+        resultado = self.llamar("leer_archivo", {"ruta": "puente/clave.md"})
+        self.assertTrue(resultado["isError"])
+        busqueda = self.llamar("buscar_texto", {"texto": "no debe leerse"})
+        self.assertNotIn("no debe leerse", busqueda["content"][0]["text"])
+        self.assertNotIn("puente", self.llamar("listar_directorio", {})["content"][0]["text"])
+        self.assertEqual((self.afuera / "clave.md").read_text(encoding="utf-8"), "no debe leerse\n")
+
+    def test_stdio_se_recupera_de_json_invalido_y_solicitud_escalar(self):
+        ruta = Path(__file__).resolve().parent.parent / "evaluacion" / "servidor_lectura_boveda.py"
+        entrada = '{\n42\n' + json.dumps({"jsonrpc": "2.0", "id": 7, "method": "ping"}) + '\n'
+        r = subprocess.run([sys.executable, "-I", str(ruta), "--root", str(self.raiz)],
+                           input=entrada, capture_output=True, text=True, encoding="utf-8", timeout=10)
+        self.assertEqual(r.returncode, 0, r.stderr)
+        respuestas = [json.loads(l) for l in r.stdout.splitlines()]
+        self.assertEqual(respuestas[0]["error"]["code"], -32700)
+        self.assertEqual(respuestas[1]["error"]["code"], -32600)
+        self.assertEqual(respuestas[2], {"jsonrpc": "2.0", "id": 7, "result": {}})
+
     def test_no_hay_herramienta_de_escritura(self):
         msg = {"jsonrpc": "2.0", "id": 9, "method": "tools/call",
                "params": {"name": "escribir_archivo", "arguments": {"ruta": "Notas/nuevo.md"}}}
