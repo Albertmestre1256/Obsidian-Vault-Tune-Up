@@ -60,3 +60,13 @@ El lector MCP incorporado el 27/10 permite lectura de archivos dentro de la copi
 Resultado en Windows: 36 pruebas ejecutadas, 35 correctas y una omitida por falta de permiso para crear enlaces simbólicos. La prueba con una junction NTFS sí verificó que no permite leer, listar o buscar contenido externo. La raíz debe permanecer estable; el servidor comprueba rutas, pero no constituye un sandbox de proceso contra cambios concurrentes del sistema de archivos.
 
 Esto verifica la herramienta sin llamadas a modelos. Sigue pendiente comprobar su integración en una sesión medida de Codex y resolver el servicio configurado para Claude. No demuestra ahorro de tokens ni autoriza nuevos intentos: las cuatro sesiones de calibración previas continúan agotadas.
+
+## Segunda calibración — 28/10/2026
+
+Tras el pedido de continuar se inició otra calibración limitada a cuatro sesiones, todas sobre copias nuevas del corpus ficticio. Claude Code, usando la cuenta directa del usuario, reportó `claude-sonnet-5-5` tanto al inicio como en el resultado; se solicitó esfuerzo alto. En A y B respondió correctamente la única consulta de calibración y citó rangos comprobados contra el archivo efectivamente leído. Hubo uso registrado y ninguna modificación de las copias.
+
+Codex llegó al lector MCP, pero la llamada exigió aprobación mientras la sesión usaba la política never; no leyó los documentos. Ambos intentos se conservan como fallos de acceso. La regla del ejecutor confundió una llamada intentada con una lectura completada y por eso no canceló el segundo intento de Codex; se documentó el desvío y se preparó la corrección sin consumir sesiones adicionales. No se excedió el total de cuatro.
+
+El lector 1.2 declara las tres herramientas como solo lectura. La configuración preparada para la siguiente comprobación limita los nombres permitidos y usa el modo MCP writes, que solicita aprobación para herramientas sin marca de lectura. No habilita shell ni escritura, y todavía no se comprobó con un modelo. La suite de 36 pruebas sigue correcta con una omisión por permisos de symlinks.
+
+La consulta de calibración se excluye del piloto. Dos respuestas correctas de una misma consulta no acreditan ahorro ni calidad general del kit; las cantidades de entrada incluyen historial, instrucciones, herramientas y caché, no solo texto de notas. El piloto de 96 sesiones por entorno no se ejecutó. Las trazas y metadatos privados se mantienen fuera del repositorio.

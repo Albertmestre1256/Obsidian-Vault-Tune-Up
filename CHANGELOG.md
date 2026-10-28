@@ -1,5 +1,11 @@
 # Cambios
 
+## Calibración de lectura — 2026-10-28
+
+- Claude Code con cuenta directa y Sonnet 5.5: consulta de calibración correcta con citas verificadas en las dos condiciones; sin afirmar eficiencia del kit.
+- Codex: bloqueo MCP por aprobación pendiente, conservado como fallo de acceso. Detectado y documentado un error en la regla de parada del ejecutor experimental externo.
+- Lector MCP 1.2: anotaciones de lectura sin efectos destructivos. Preparada una configuración que permite únicamente las tres herramientas de lectura, sin ampliar permisos de shell o escritura; pendiente de comprobar dentro de Codex.
+
 ## Revisión del lector de evaluación — 2026-10-28
 
 - Lectura real por rangos en notas grandes, validación de límites y numeración, y salida acotada.

@@ -62,6 +62,16 @@ HERRAMIENTAS = [
     },
 ]
 
+# Metadatos para políticas que permiten lectura y piden aprobación para escritura.
+# El confinamiento real sigue en dentro(); estas anotaciones no lo reemplazan.
+for herramienta in HERRAMIENTAS:
+    herramienta["annotations"] = {
+        "readOnlyHint": True,
+        "destructiveHint": False,
+        "idempotentHint": True,
+        "openWorldHint": False,
+    }
+
 
 def dentro(raiz, relativa):
     if not isinstance(relativa, str):
@@ -208,7 +218,7 @@ def responder(msg, raiz):
             resultado = {
                 "protocolVersion": PROTOCOLO,
                 "capabilities": {"tools": {}},
-                "serverInfo": {"name": "boveda-lectura", "version": "1.1"},
+                "serverInfo": {"name": "boveda-lectura", "version": "1.2"},
             }
         elif metodo == "tools/list":
             resultado = {"tools": HERRAMIENTAS}

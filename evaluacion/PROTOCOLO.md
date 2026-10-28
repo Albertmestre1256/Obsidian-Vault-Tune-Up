@@ -12,9 +12,9 @@
 > - Líneas 128–137: Análisis e incertidumbre
 > - Líneas 138–150: Regla de decisión y resultados incompletos
 > - Líneas 151–156: Evidencia mínima para auditar
-> - Líneas 157–168: Instrumentación sin interfaz visual
-> - Líneas 169–180: Fundamento y fuentes
-> - Líneas 181–185: Estado de las afirmaciones actuales
+> - Líneas 157–169: Instrumentación sin interfaz visual
+> - Líneas 170–181: Fundamento y fuentes
+> - Líneas 182–186: Estado de las afirmaciones actuales
 
 # Medir la eficiencia de Obsidian Vault Tune-up
 
@@ -162,6 +162,7 @@ El informe distingue tres niveles: reproducción de cálculos sobre las mismas t
 - ChatGPT/Claude web: usar corpus ficticio, proyectos separados y configuración registrada, sin automatizar la computadora. Si no existe una exportación suficiente, dejar el estudio de tokens para una interfaz instrumentable y registrar solo calidad observable en web.
 - Lectura sin shell: si el cliente bloquea comandos de lectura, no se habilitan por fuera de la política. La vía es `evaluacion/servidor_lectura_boveda.py`: un servidor MCP de solo lectura confinado a la copia del intento, sin herramientas de escritura. Registrar en el intento qué herramienta se usó (llamadas MCP o shell) y comprobar que las llamadas de lectura aparecen en la traza; una sesión sin lectura queda como fallo de acceso, no como medición de calidad.
 - Fijar también versión/hash del lector y sus límites, formato y parámetros. El lector ofrece rangos para notas grandes y continuación con `offset` en búsqueda/listado. Un resultado truncado, un error de UTF-8 o de acceso no acreditan ausencia del dato. Mantener estable la copia durante el intento y comprobar su manifiesto al terminar; el servidor no sustituye un sandbox del proceso ni protege frente a modificaciones concurrentes de enlaces del sistema de archivos.
+- Verificar la política de herramientas antes del piloto: una llamada MCP intentada o una salida de proceso cero no prueban acceso. Exigir una llamada completada sin error y comprobar su contenido. El lector 1.2 declara `readOnlyHint`; una configuración acotada puede listar solo sus tres herramientas y usar `default_tools_approval_mode = "writes"`, manteniendo denegada la ejecución o escritura no aprobadas. Las anotaciones no sustituyen los controles de rutas. [Política MCP de Codex](https://learn.chatgpt.com/docs/extend/mcp).
 - Modelo y servicio: la sesión se acepta solo si el evento de inicio reporta el identificador de modelo solicitado. Si reporta un alias, un nombre distinto o ninguno, la sesión se marca inválida y no se etiqueta con el nombre pedido. Un destino local que no escucha (conexión rechazada) se registra como fallo técnico de infraestructura, con su error, antes de cualquier reintento.
 
 Estas capacidades documentadas no implican que se hayan ejecutado modelos en esta investigación. El protocolo no instala clientes, no incorpora dependencias y no requiere contratar una plataforma de evaluación.

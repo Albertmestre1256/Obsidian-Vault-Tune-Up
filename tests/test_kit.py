@@ -501,6 +501,10 @@ class LecturaConfinada(unittest.TestCase):
         lista = self.servidor.responder({"jsonrpc": "2.0", "id": 2, "method": "tools/list"}, self.raiz)
         nombres = {h["name"] for h in lista["result"]["tools"]}
         self.assertEqual(nombres, {"listar_directorio", "leer_archivo", "buscar_texto"})
+        for herramienta in lista["result"]["tools"]:
+            self.assertTrue(herramienta["annotations"]["readOnlyHint"])
+            self.assertFalse(herramienta["annotations"]["destructiveHint"])
+            self.assertFalse(herramienta["annotations"]["openWorldHint"])
         notificacion = {"jsonrpc": "2.0", "method": "notifications/initialized"}
         self.assertIsNone(self.servidor.responder(notificacion, self.raiz))
 
