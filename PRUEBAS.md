@@ -1,5 +1,9 @@
 # Pruebas y límites
 
+## Orientación de nodos — 29/10/2026
+
+Cuatro sesiones nuevas de Sonnet 5.5 en alto sobre copias ficticias: Brisa y Nexo antes/después. Datos, roles y vigencia correctos por revisión documental de la misma IA, sin revisión humana independiente; tres diferencias de tipo/formato en campos correctos se conservaron y adjudicaron antes de revisar consumo. Copias intactas y trazas privadas. La entrada acumulada fue 82.873 → 106.908 tokens (+29,00 %); tiempos mixtos. No se demuestra ahorro ni contexto mínimo. Detalle y método para buscarlo en [Eficiencia de nodos](evaluacion/EFICIENCIA-NODOS.md).
+
 ## Qué verificar
 
 - Rechazo de sobrescritura y captura estable del origen.

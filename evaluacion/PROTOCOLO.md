@@ -1,20 +1,20 @@
 > [!info]- Índice de esta nota (líneas)
 > - Líneas 1–17: Este índice
 > - Líneas 19–24: Medir la eficiencia de Obsidian Vault Tune-up
-> - Líneas 25–30: Pregunta y alcance
-> - Líneas 31–48: Comparaciones que permiten atribuir efectos
-> - Líneas 49–58: Unidad experimental y entornos
-> - Líneas 59–68: Tareas y respuestas esperadas
-> - Líneas 69–84: Rúbrica de calidad
-> - Líneas 85–105: Métricas de recursos
-> - Líneas 106–117: Coste de preparación y mantenimiento
-> - Líneas 118–127: Ejecución reproducible
-> - Líneas 128–137: Análisis e incertidumbre
-> - Líneas 138–150: Regla de decisión y resultados incompletos
-> - Líneas 151–156: Evidencia mínima para auditar
-> - Líneas 157–169: Instrumentación sin interfaz visual
-> - Líneas 170–181: Fundamento y fuentes
-> - Líneas 182–186: Estado de las afirmaciones actuales
+> - Líneas 25–32: Pregunta y alcance
+> - Líneas 33–50: Comparaciones que permiten atribuir efectos
+> - Líneas 51–60: Unidad experimental y entornos
+> - Líneas 61–70: Tareas y respuestas esperadas
+> - Líneas 71–86: Rúbrica de calidad
+> - Líneas 87–107: Métricas de recursos
+> - Líneas 108–119: Coste de preparación y mantenimiento
+> - Líneas 120–129: Ejecución reproducible
+> - Líneas 130–139: Análisis e incertidumbre
+> - Líneas 140–152: Regla de decisión y resultados incompletos
+> - Líneas 153–158: Evidencia mínima para auditar
+> - Líneas 159–171: Instrumentación sin interfaz visual
+> - Líneas 172–183: Fundamento y fuentes
+> - Líneas 184–188: Estado de las afirmaciones actuales
 
 # Medir la eficiencia de Obsidian Vault Tune-up
 
@@ -27,6 +27,8 @@ Este protocolo evalúa una versión del kit como investigación independiente. N
 ¿La bóveda preparada con el kit permite resolver las mismas tareas con menos recursos, manteniendo respuestas correctas, evidencia comprobable y contenido conservado? Medir también cuánto cuesta organizarla y mantenerla. Una reducción de conexiones o de caracteres por sí sola no responde esta pregunta.
 
 Separar tres resultados: conservación de la entrega; calidad de lectura y escritura; recursos consumidos. No combinarlos en una puntuación opaca. Un fallo de conservación invalida la entrega aunque sus consultas sean baratas.
+
+Para la definición de eficiencia acordada el 29/10/2026 —comprender contexto y conformación de un nodo con la menor entrada suficiente— ver [Eficiencia de nodos](EFICIENCIA-NODOS.md). Distingue consumo observado, pico de contexto, búsqueda del mínimo entre presupuestos, tiempo y coherencia, e incluye el primer ensayo exploratorio.
 
 ## Comparaciones que permiten atribuir efectos
 

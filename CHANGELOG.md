@@ -1,5 +1,11 @@
 # Cambios
 
+## Eficiencia de nodos — 2026-10-29
+
+- Definición de eficiencia centrada en comprender contexto, notas, vigencia y lugar de trabajo con la menor entrada suficiente; tiempo y coherencia se informan por separado.
+- Procedimiento para comparar consumo libre y presupuestos de contexto, distinguir pico de entrada de acumulado y conservar la evaluación de calidad antes de mirar recursos.
+- Cuatro sesiones exploratorias sobre copias ficticias, sin ahorro observado: +29,00 % de entrada acumulada en B y tiempos mixtos. Trazas privadas fuera del repositorio; no se agregan auxiliares al flujo de la persona usuaria.
+
 ## Calibración de lectura — 2026-10-28
 
 - Claude Code con cuenta directa y Sonnet 5.5: consulta de calibración correcta con citas verificadas en las dos condiciones; sin afirmar eficiencia del kit.
