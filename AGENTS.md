@@ -29,3 +29,7 @@ Este es el kit **Obsidian Vault Tune-up**. La bóveda de la persona es otra carp
 - No copiar valores privados al chat o los informes. No publicar ni subir la bóveda o las evidencias.
 - Identificarse en el registro: `IA:<nombre> (<herramienta>, <modelo si se conoce>)`.
 - Cerrar cada paso con resultado, pendientes y siguiente paso, en lenguaje simple.
+
+## Seguimiento del desarrollo
+
+Si estás investigando o corrigiendo la eficiencia del kit, retomá desde [Coordinación del diagnóstico](evaluacion/seguimiento/LEER-PRIMERO.md). Allí están las observaciones, los problemas P01–P10, responsables y registro de resultados. Leé solo la ficha y evidencia necesarias; registrá el relevo antes de editar trabajo compartido. Este seguimiento no se exige al usuario que solo quiere organizar una bóveda.

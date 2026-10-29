@@ -22,6 +22,8 @@ El script da materia prima: la IA revisa a mano cada caso dudoso antes de pasarl
 
 Sin Python, usar las herramientas equivalentes de archivos de la IA, por lotes si hace falta. Declarar las comprobaciones incompletas; no exigir programación a la persona ni estimar resultados como verificados.
 
+Un cero con un filtro no comprobado no prueba que falte contenido. Si contradice una nota conocida, verificar el alcance con una coincidencia positiva o lectura directa antes de clasificar. En Grep de Claude Code 2.1.304 se reprodujo que un espacio dentro de `glob` altera el filtro: para carpetas con espacios, usar `path` con la ruta exacta y un filtro simple comprobado. No sustituir espacios por comodines ni renombrar carpetas para sortearlo.
+
 ## Tres momentos
 
 1. Confirmar acceso y preparar inventario sin escritura.

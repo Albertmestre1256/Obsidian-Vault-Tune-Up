@@ -5,7 +5,7 @@
 > - Líneas 27–41: Medidas que se mantienen separadas
 > - Líneas 42–54: Cómo buscar el menor contexto suficiente
 > - Líneas 55–60: Cómo evaluar coherencia
-> - Líneas 61–76: Ensayo exploratorio del 29 de octubre
+> - Líneas 61–78: Ensayo exploratorio del 29 de octubre
 
 # Eficiencia para comprender un nodo
 
@@ -74,3 +74,5 @@ La entrada acumulada total fue 82.873 en A y 106.908 en B: 29,00 % más en estas
 Las dos condiciones tenían cero destinos wiki inexistentes según el diagnóstico, cuyo comprobador no certifica por sí solo desambiguación semántica. B tenía 34 notas con índices consistentes y ocho excepciones de conservación. No se observó una mejora de comprensión en estas respuestas ni se demostró ahorro o mínimo suficiente. Todas las copias conservaron sus hashes; las fuentes ficticias no tenían flujos NTFS alternativos.
 
 Plan, prompts, claves, invocaciones, trazas y análisis reproducible permanecen en el expediente local privado del ensayo. No se publican copias ni eventos que puedan contener metadatos de cuenta. El registro permite repetir cálculos; las sesiones de un servicio cambiante no son deterministas. La metodología de contrastar respuestas, trazas y estado se apoya en [evaluación de agentes de Anthropic](https://www.anthropic.com/research/demystifying-evals-for-ai-agents); las decisiones y resultados concretos de este documento pertenecen a Tune-up.
+
+Para continuar el diagnóstico entre distintas IA, usar [Coordinación del diagnóstico](seguimiento/LEER-PRIMERO.md): observaciones fechadas, fichas P01–P10 y registro de intentos. Documentar una causa no equivale a tener implementada y validada su solución.

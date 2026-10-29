@@ -1,5 +1,11 @@
 # Cambios
 
+## Diagnóstico P01 — 2026-10-29
+
+- Reproducción nativa de Grep sin modelos: el filtro con un espacio devuelve cero pese a coincidencias conocidas; caso reducido a dos archivos.
+- Mitigación local comprobada dos veces contra rutas, líneas y texto esperados; guía del paso 2 para usar ruta exacta y no interpretar un filtro defectuoso como ausencia de contenido.
+- Evidencia y límites en evaluacion/P01-GREP.md. El fallo original del cliente persiste y falta validar la instrucción con un agente; no se afirma ahorro.
+
 ## Eficiencia de nodos — 2026-10-29
 
 - Definición de eficiencia centrada en comprender contexto, notas, vigencia y lugar de trabajo con la menor entrada suficiente; tiempo y coherencia se informan por separado.
