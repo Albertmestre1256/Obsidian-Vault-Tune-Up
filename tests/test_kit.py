@@ -3,17 +3,22 @@
 Uso: python -B -m unittest discover -s tests
 """
 import json
+import os
 import shutil
 import subprocess
 import sys
 import tempfile
 import unittest
+from unittest import mock
 from pathlib import Path
 
 HERRAMIENTAS = Path(__file__).resolve().parent.parent / "herramientas"
 sys.path.insert(0, str(HERRAMIENTAS))
 sys.dont_write_bytecode = True
 import indice_lineas  # noqa: E402
+import respaldo  # noqa: E402
+import verificar  # noqa: E402
+import diagnostico  # noqa: E402
 
 
 def correr(script, *args):
@@ -47,7 +52,170 @@ class BovedaDesordenada(unittest.TestCase):
         self.trabajo = self.tmp / "trabajo"
 
     def tearDown(self):
+        self.assertEqual(self.tmp.resolve().parent, Path(tempfile.gettempdir()).resolve())
         shutil.rmtree(self.tmp, ignore_errors=True)
+
+    def preparar_verificacion(self):
+        self.assertEqual(correr("respaldo.py", self.boveda, self.tmp / "respaldo", self.trabajo).returncode, 0)
+        r = correr("diagnostico.py", self.boveda, self.trabajo / "diagnostico-datos.json")
+        self.assertEqual(r.returncode, 0, r.stderr)
+        d = json.loads((self.trabajo / "diagnostico-datos.json").read_text(encoding="utf-8"))
+        self.esperados = self.trabajo / "esperados.txt"
+        faltantes = d["indices_linea"]["FALTA"]
+        self.assertEqual(correr("indice_lineas.py", "apply", *(self.boveda / n for n in faltantes)).returncode, 0)
+        self.esperados.write_text("\n".join(faltantes), encoding="utf-8")
+        return faltantes
+
+    def test_un_archivo_esperado_no_puede_desaparecer(self):
+        self.preparar_verificacion()
+        (self.boveda / "ideas sueltas.md").unlink()
+        r = correr("verificar.py", self.boveda, self.tmp / "respaldo", self.trabajo, self.esperados)
+        self.assertEqual(r.returncode, 2, r.stdout)
+        self.assertIn("ideas sueltas.md", r.stdout)
+
+    def test_el_diagnostico_no_lee_notas_excluidas(self):
+        protegida = escribir(self.boveda, "no-leer.md", "Contenido ficticio fuera del alcance.\n")
+        self.trabajo.mkdir()
+        salida = self.trabajo / "diagnostico-datos.json"
+        leer_real = Path.read_text
+
+        def leer_solo_permitido(path, *args, **kw):
+            if path.resolve() == protegida.resolve():
+                raise AssertionError("La nota excluida no debe abrirse")
+            return leer_real(path, *args, **kw)
+
+        argv = ["diagnostico.py", str(self.boveda), str(salida), "--excluir", "no-leer.md"]
+        with mock.patch.object(sys, "argv", argv), mock.patch.object(Path, "read_text", leer_solo_permitido), mock.patch("builtins.print"):
+            diagnostico.main()
+        datos = json.loads(salida.read_text(encoding="utf-8"))
+        self.assertIn("no-leer.md", datos["inventario"]["notas_no_leidas"])
+
+    def test_movimiento_a_sin_clasificar_conserva_contenido(self):
+        permitidos = self.preparar_verificacion()
+        origen, destino = "ideas sueltas.md", "Sin clasificar/ideas sueltas.md"
+        (self.boveda / "Sin clasificar").mkdir()
+        (self.boveda / origen).rename(self.boveda / destino)
+        self.esperados.write_text("\n".join(permitidos + [destino]), encoding="utf-8")
+        movimientos = self.trabajo / "movimientos.json"
+        movimientos.write_text(json.dumps({origen: destino}), encoding="utf-8")
+        args = (self.boveda, self.tmp / "respaldo", self.trabajo, self.esperados, "--movimientos", movimientos)
+        r = correr("verificar.py", *args)
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        # Un destino existente con texto perdido tampoco acredita un movimiento correcto.
+        contenido = (self.boveda / destino).read_text(encoding="utf-8")
+        (self.boveda / destino).write_text(contenido.replace("Ver [[Proyecto X/plan]]", "Perdido"), encoding="utf-8")
+        r = correr("verificar.py", *args)
+        self.assertEqual(r.returncode, 2, r.stdout)
+        self.assertIn("contenido no conservado: ['ideas sueltas.md']", r.stdout)
+
+    def test_indices_pendientes_impiden_cierre(self):
+        self.preparar_verificacion()
+        nueva = escribir(self.boveda, "pendiente.md", "# Pendiente\n\nContenido.\n")
+        with self.esperados.open("a", encoding="utf-8") as f:
+            f.write("\n" + nueva.name)
+        r = correr("verificar.py", self.boveda, self.tmp / "respaldo", self.trabajo, self.esperados)
+        self.assertEqual(r.returncode, 2, r.stdout)
+        self.assertIn("FALTA: pendiente.md", r.stdout)
+
+    def test_movimiento_no_puede_sobrescribir_otro_original(self):
+        permitidos = self.preparar_verificacion()
+        origen, destino = "ideas sueltas.md", "Proyecto X/plan.md"
+        # Reproduce una sobreescritura ya ocurrida: el verificador debe rechazarla.
+        (self.boveda / origen).replace(self.boveda / destino)
+        self.esperados.write_text("\n".join(permitidos), encoding="utf-8")
+        movimientos = self.trabajo / "movimientos.json"
+        movimientos.write_text(json.dumps({origen: destino}), encoding="utf-8")
+        r = correr("verificar.py", self.boveda, self.tmp / "respaldo", self.trabajo, self.esperados,
+                   "--movimientos", movimientos)
+        self.assertEqual(r.returncode, 2)
+        self.assertIn("destino estaba ocupado", r.stderr)
+
+    def test_movimientos_aceptan_wikilinks_reparados_segun_el_plan(self):
+        permitidos = self.preparar_verificacion()
+        movimientos = {"ideas sueltas.md": "Sin clasificar/ideas.md", "Proyecto X/plan.md": "Datos/plan.md"}
+        for origen, destino in movimientos.items():
+            (self.boveda / destino).parent.mkdir(parents=True, exist_ok=True)
+            (self.boveda / origen).rename(self.boveda / destino)
+        nota = self.boveda / "Sin clasificar/ideas.md"
+        nota.write_text(nota.read_text(encoding="utf-8").replace("[[Proyecto X/plan]]", "[[Datos/plan]]"), encoding="utf-8")
+        self.esperados.write_text("\n".join(permitidos + list(movimientos.values())), encoding="utf-8")
+        mapa = self.trabajo / "movimientos.json"
+        mapa.write_text(json.dumps(movimientos), encoding="utf-8")
+        r = correr("verificar.py", self.boveda, self.tmp / "respaldo", self.trabajo, self.esperados,
+                   "--movimientos", mapa)
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+
+    def test_movimiento_repara_markdown_sin_cambiar_el_destino(self):
+        escribir(self.boveda, "ideas sueltas.md", "# Ideas\n\nVer [fuente](adjuntos/fuente.pdf).\n")
+        (self.boveda / "adjuntos").mkdir()
+        (self.boveda / "adjuntos/fuente.pdf").write_bytes(b"Adjunto ficticio")
+        permitidos = self.preparar_verificacion()
+        origen, destino = "ideas sueltas.md", "Datos/ideas.md"
+        (self.boveda / "Datos").mkdir()
+        (self.boveda / origen).rename(self.boveda / destino)
+        nota = self.boveda / destino
+        texto = nota.read_text(encoding="utf-8")
+        self.esperados.write_text("\n".join(permitidos + [destino]), encoding="utf-8")
+        mapa = self.trabajo / "movimientos.json"
+        mapa.write_text(json.dumps({origen: destino}), encoding="utf-8")
+        args = (self.boveda, self.tmp / "respaldo", self.trabajo, self.esperados, "--movimientos", mapa)
+        # Mismo texto tras mover, pero enlace relativo ahora roto: no alcanza comparar bytes.
+        roto = correr("verificar.py", *args)
+        self.assertEqual(roto.returncode, 2)
+        self.assertIn("contenido no conservado: 0", roto.stdout)
+        self.assertIn("[revisar] enlaces de notas movidas: 1", roto.stdout)
+        nota.write_text(texto.replace("(adjuntos/fuente.pdf)", "(../adjuntos/fuente.pdf)"), encoding="utf-8")
+        r = correr("verificar.py", *args)
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        nota.write_text(texto.replace("(adjuntos/fuente.pdf)", "(../Proyecto%20X/plan.md)"), encoding="utf-8")
+        self.assertEqual(correr("verificar.py", *args).returncode, 2)
+
+    def test_movimiento_con_propiedades_y_blancos_conserva_texto(self):
+        origen, destino = "Proyecto X/plan.md", "Sin clasificar/plan.md"
+        (self.boveda / origen).write_text("---\ntipo: plan\n---\n\n# Plan\n\nTexto original.\n", encoding="utf-8")
+        permitidos = self.preparar_verificacion()
+        (self.boveda / "Sin clasificar").mkdir()
+        (self.boveda / origen).rename(self.boveda / destino)
+        self.esperados.write_text("\n".join(permitidos + [destino]), encoding="utf-8")
+        movimientos = self.trabajo / "movimientos.json"
+        movimientos.write_text(json.dumps({origen: destino}), encoding="utf-8")
+        r = correr("verificar.py", self.boveda, self.tmp / "respaldo", self.trabajo, self.esperados,
+                   "--movimientos", movimientos)
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+
+    def test_movimientos_no_admiten_escape(self):
+        self.preparar_verificacion()
+        movimientos = self.trabajo / "movimientos.json"
+        movimientos.write_text(json.dumps({"ideas sueltas.md": "../fuera.md"}), encoding="utf-8")
+        r = correr("verificar.py", self.boveda, self.tmp / "respaldo", self.trabajo, self.esperados,
+                   "--movimientos", movimientos)
+        self.assertEqual(r.returncode, 2)
+        self.assertIn("sin escapes", r.stderr)
+
+    def test_respaldo_rechaza_origen_que_cambia_al_copiar(self):
+        copia_real = shutil.copytree
+
+        def copiar_y_cambiar(origen, destino, *args, **kw):
+            resultado = copia_real(origen, destino, *args, **kw)
+            if Path(origen) == self.boveda:
+                (Path(origen) / "ideas sueltas.md").write_text("Otra sesión cambió el origen", encoding="utf-8")
+            return resultado
+
+        with mock.patch.object(sys, "argv", ["respaldo.py", str(self.boveda), str(self.tmp / "respaldo"), str(self.trabajo)]):
+            with mock.patch.object(respaldo.shutil, "copytree", side_effect=copiar_y_cambiar), mock.patch("builtins.print"):
+                self.assertEqual(respaldo.main(), 2)
+
+    @unittest.skipUnless(os.name == "nt", "Los flujos NTFS solo existen en Windows")
+    def test_flujo_ntfs_no_se_puede_perder_aunque_el_archivo_este_en_el_plan(self):
+        flujo = Path(str(self.boveda / "ideas sueltas.md") + ":texto-oculto")
+        flujo.write_bytes(b"Contenido original oculto")
+        self.preparar_verificacion()
+        copia_flujo = Path(str(self.tmp / "respaldo" / "ideas sueltas.md") + ":texto-oculto")
+        self.assertEqual(copia_flujo.read_bytes(), b"Contenido original oculto")
+        flujo.write_bytes(b"Contenido alterado")
+        r = correr("verificar.py", self.boveda, self.tmp / "respaldo", self.trabajo, self.esperados)
+        self.assertEqual(r.returncode, 2, r.stdout)
+        self.assertIn("ideas sueltas.md:texto-oculto", r.stdout)
 
     def test_recorrido_completo(self):
         r = correr("respaldo.py", self.boveda, self.tmp / "respaldo", self.trabajo)
@@ -89,6 +257,39 @@ class BovedaDesordenada(unittest.TestCase):
         self.assertIn(".obsidian/app.json", r.stdout)
 
 
+class ConservacionDeEnlaces(unittest.TestCase):
+    def test_el_codigo_literal_no_se_normaliza_como_navegacion(self):
+        anteriores = {"nota.md", "plan.md"}
+        actuales = {"Datos/nota.md", "Datos/plan.md"}
+        movimientos = {"nota.md": "Datos/nota.md", "plan.md": "Datos/plan.md"}
+        envolturas = ["```markdown\n{}\n```", "~~~~\n{}\n~~~~", "`{}`", "``ejemplo `{}` ``", "    {}"]
+        for envoltura in envolturas:
+            with self.subTest(envoltura=envoltura):
+                antes = envoltura.format("[[plan]]")
+                despues = envoltura.format("[[Datos/plan]]")
+                canonico = verificar.normalizar_enlaces(antes, "nota.md", anteriores, movimientos)
+                self.assertEqual(canonico, antes)
+                self.assertNotEqual(canonico, verificar.normalizar_enlaces(despues, "Datos/nota.md", actuales, {}))
+
+    def test_destinos_etiquetas_y_fragmentos_siguen_siendo_distintos(self):
+        archivos = {"nota.md", "a#x.md", "a", "plan.md"}
+        normalizar = lambda t: verificar.normalizar_enlaces(t, "nota.md", archivos, {})
+        self.assertNotEqual(normalizar("[a](a%23x.md)"), normalizar("[a](a#x.md)"))
+        self.assertNotEqual(normalizar("[[plan|Etiqueta]]"), normalizar("[[plan|Otra etiqueta]]"))
+        self.assertNotEqual(normalizar("[[plan#Uno]]"), normalizar("[[plan#Dos]]"))
+        antes = verificar.normalizar_enlaces("[[plan\\|Etiqueta]]", "nota.md", archivos, {"plan.md": "Datos/plan.md"})
+        despues = verificar.normalizar_enlaces("[[Datos/plan\\|Etiqueta]]", "nota.md", {"Datos/plan.md"}, {})
+        self.assertEqual(antes, despues)
+
+    def test_movimiento_utf16_identico_conserva_bytes_sin_convertir(self):
+        with tempfile.TemporaryDirectory() as carpeta:
+            antes, despues = Path(carpeta) / "antes.md", Path(carpeta) / "despues.md"
+            contenido = "# Original\n\nTexto UTF-16 sin convertir.\n".encode("utf-16")
+            antes.write_bytes(contenido)
+            despues.write_bytes(contenido)
+            self.assertTrue(verificar.contenido_conservado(antes, despues, (lambda t: t, lambda t: t)))
+
+
 class IndiceDeLineas(unittest.TestCase):
     def armar(self, texto):
         lineas, _, _ = indice_lineas.partir(texto)
@@ -118,6 +319,194 @@ class IndiceDeLineas(unittest.TestCase):
             ruta = Path(d) / "a.md"
             ruta.write_bytes("# A\n".encode("utf-16"))
             self.assertEqual(indice_lineas.estado(str(ruta))[0], "OMITIDA")
+
+    def test_descripcion_maximo_diez_palabras_y_cuerpo_intacto(self):
+        cuerpo = "# Uno dos tres cuatro cinco seis siete ocho nueve diez once doce\n\nTexto original.\n"
+        nuevo = self.armar(cuerpo)
+        for linea in nuevo:
+            entrada = indice_lineas.ENTRADA.match(linea)
+            if entrada:
+                self.assertLessEqual(len(entrada.group(3).split()), 10)
+        bloque = indice_lineas.buscar_bloque(nuevo, 0)
+        self.assertEqual("\n".join(nuevo[bloque[1] + 1:]) + "\n", cuerpo)
+        self.assertEqual(self.armar("\n".join(nuevo) + "\n"), nuevo)
+
+    def test_titulos_dentro_de_cercas_no_son_secciones(self):
+        cuerpo = "# Real\n\n~~~~md\n## Falso\n~~~\n## También falso\n~~~~\n\n````\n## Falso otra vez\n```\n## Aún falso\n````\n\n## Final\n\nTexto\n"
+        nuevo = self.armar(cuerpo)
+        descripciones = [m.group(3) for m in map(indice_lineas.ENTRADA.match, nuevo) if m]
+        self.assertEqual(descripciones, ["Este índice", "Real", "Final"])
+        self.assertEqual(self.armar("\n".join(nuevo) + "\n"), nuevo)
+
+    def test_etiqueta_larga_no_deja_enlace_roto_en_indice(self):
+        nuevo = self.armar("# [[ruta|Uno dos tres cuatro cinco seis siete ocho nueve diez once]]\n\nTexto\n")
+        entradas = [m.group(3) for m in map(indice_lineas.ENTRADA.match, nuevo) if m]
+        self.assertEqual(entradas[-1], "Uno dos tres cuatro cinco seis siete ocho nueve diez")
+
+
+class LecturaConfinada(unittest.TestCase):
+    """Servidor MCP de evaluación: solo lee dentro de su raíz y no expone escritura."""
+
+    @classmethod
+    def setUpClass(cls):
+        import importlib.util
+        ruta = Path(__file__).resolve().parent.parent / "evaluacion" / "servidor_lectura_boveda.py"
+        spec = importlib.util.spec_from_file_location("servidor_lectura_boveda", ruta)
+        cls.servidor = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cls.servidor)
+
+    def setUp(self):
+        self.raiz_tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.raiz_tmp.cleanup)
+        self.raiz = Path(self.raiz_tmp.name).resolve()
+        (self.raiz / "Notas").mkdir()
+        (self.raiz / "Notas" / "uno.md").write_text("# Uno\n\nCódigo de control: ABC\n", encoding="utf-8")
+        self.afuera_tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.afuera_tmp.cleanup)
+        self.afuera = Path(self.afuera_tmp.name).resolve()
+        (self.afuera / "clave.md").write_text("no debe leerse\n", encoding="utf-8")
+
+    def llamar(self, nombre, args):
+        msg = {"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": nombre, "arguments": args}}
+        return self.servidor.responder(msg, self.raiz)["result"]
+
+    def test_lee_por_rango_y_busca_con_numeracion(self):
+        leido = self.llamar("leer_archivo", {"ruta": "Notas/uno.md", "desde": 3, "hasta": 3})
+        self.assertFalse(leido["isError"])
+        self.assertEqual(leido["content"][0]["text"], "3: Código de control: ABC")
+        hallado = self.llamar("buscar_texto", {"texto": "control"})
+        self.assertIn("Notas/uno.md:3: Código de control: ABC", hallado["content"][0]["text"])
+
+    def test_rutas_que_salen_de_la_raiz_se_rechazan(self):
+        relativa = f"../{self.afuera.name}/clave.md"
+        absoluta = str(self.afuera / "clave.md")
+        r1 = self.llamar("leer_archivo", {"ruta": relativa})
+        r2 = self.llamar("leer_archivo", {"ruta": absoluta})
+        self.assertTrue(r1["isError"])
+        self.assertIn("fuera de la bóveda", r1["content"][0]["text"])
+        self.assertTrue(r2["isError"])
+        self.assertIn("absoluta no permitida", r2["content"][0]["text"])
+
+    def test_enlace_simbolico_que_sale_de_la_raiz_se_rechaza(self):
+        try:
+            (self.raiz / "enlace.md").symlink_to(self.afuera / "clave.md")
+        except (OSError, NotImplementedError):
+            self.skipTest("sin permiso para crear enlaces simbólicos en esta máquina")
+        resultado = self.llamar("leer_archivo", {"ruta": "enlace.md"})
+        self.assertTrue(resultado["isError"])
+        self.assertNotIn("no debe leerse", resultado["content"][0]["text"])
+
+    def test_archivo_grande_exige_rango(self):
+        (self.raiz / "grande.md").write_text("x\n" * (self.servidor.MAX_BYTES // 2 + 10), encoding="utf-8")
+        resultado = self.llamar("leer_archivo", {"ruta": "grande.md"})
+        self.assertTrue(resultado["isError"])
+        self.assertIn("rango", resultado["content"][0]["text"])
+
+    def test_rango_pequeno_en_archivo_grande_si_se_puede_leer(self):
+        (self.raiz / "grande.md").write_bytes(("área\n" * self.servidor.MAX_BYTES).encode("utf-8"))
+        resultado = self.llamar("leer_archivo", {"ruta": "grande.md", "desde": 2, "hasta": 3})
+        self.assertFalse(resultado["isError"])
+        self.assertEqual(resultado["content"][0]["text"], "2: área\n3: área")
+
+    def test_rangos_invalidos_no_devuelven_lineas_con_numeros_falsos(self):
+        for limites in [{"desde": 0}, {"desde": -1}, {"desde": True},
+                        {"hasta": "3"}, {"desde": 3, "hasta": 2}]:
+            with self.subTest(limites=limites):
+                resultado = self.llamar("leer_archivo", {"ruta": "Notas/uno.md", **limites})
+                self.assertTrue(resultado["isError"])
+
+    def test_busqueda_en_nota_grande_y_paginacion_sin_perder_resultados(self):
+        (self.raiz / "grande.md").write_bytes(b"relleno\n" * self.servidor.MAX_BYTES + b"aguja final\n")
+        hallado = self.llamar("buscar_texto", {"texto": "aguja final"})
+        self.assertFalse(hallado["isError"])
+        self.assertIn("aguja final", hallado["content"][0]["text"])
+        (self.raiz / "muchos.md").write_bytes(("marca\n" * 201).encode("utf-8"))
+        primera = self.llamar("buscar_texto", {"texto": "marca"})["content"][0]["text"]
+        segunda = self.llamar("buscar_texto", {"texto": "marca", "offset": 200})["content"][0]["text"]
+        self.assertIn("offset=200", primera)
+        self.assertNotIn("muchos.md:201:", primera)
+        self.assertIn("muchos.md:201: marca", segunda)
+
+    def test_respuesta_y_linea_gigante_tienen_limite_explicito(self):
+        (self.raiz / "gigante.md").write_bytes(b"x" * (self.servidor.MAX_BYTES + 1))
+        resultado = self.llamar("leer_archivo", {"ruta": "gigante.md", "desde": 1, "hasta": 1})
+        self.assertTrue(resultado["isError"])
+        with mock.patch.object(self.servidor, "MAX_BYTES", 100):
+            (self.raiz / "sumatoria.md").write_bytes(b"0123456789\n" * 20)
+            resultado = self.llamar("leer_archivo", {"ruta": "sumatoria.md", "desde": 1, "hasta": 20})
+            self.assertTrue(resultado["isError"])
+            self.assertIn("rango menor", resultado["content"][0]["text"])
+
+    def test_no_reemplaza_silenciosamente_codificacion_invalida(self):
+        (self.raiz / "codificacion.md").write_bytes(b"dato\xff\n")
+        self.assertTrue(self.llamar("leer_archivo", {"ruta": "codificacion.md"})["isError"])
+        self.assertTrue(self.llamar("buscar_texto", {"texto": "ausente"})["isError"])
+
+    def test_recorrido_incompleto_no_se_informa_como_ausencia(self):
+        def recorrido(*args, **kwargs):
+            kwargs["onerror"](PermissionError("sin acceso a una carpeta"))
+            return iter(())
+        with mock.patch.object(self.servidor.os, "walk", side_effect=recorrido):
+            resultado = self.llamar("buscar_texto", {"texto": "ausente"})
+        self.assertTrue(resultado["isError"])
+        self.assertIn("búsqueda incompleta", resultado["content"][0]["text"])
+
+    def test_directorio_paginado_y_argumentos_invalidos(self):
+        for n in range(3):
+            (self.raiz / f"archivo{n}.md").write_bytes(b"ok\n")
+        with mock.patch.object(self.servidor, "MAX_RESULTADOS", 2):
+            primera = self.llamar("listar_directorio", {"ruta": ""})["content"][0]["text"]
+            segunda = self.llamar("listar_directorio", {"ruta": "", "offset": 2})["content"][0]["text"]
+            self.assertIn("offset=2", primera)
+            self.assertNotEqual(primera.splitlines()[0], segunda.splitlines()[0])
+        for args in [{"texto": "ok", "offset": -1}, {"texto": 1}, {"texto": "ok", "otro": True}]:
+            self.assertTrue(self.llamar("buscar_texto", args)["isError"])
+
+    @unittest.skipUnless(os.name == "nt", "junctions NTFS solo en Windows")
+    def test_junction_no_permita_leer_o_buscar_fuera(self):
+        junction = self.raiz / "puente"
+        r = subprocess.run(["cmd", "/c", "mklink", "/J", str(junction), str(self.afuera)],
+                           capture_output=True)
+        if r.returncode:
+            self.skipTest("no se pudo crear una junction NTFS en la carpeta temporal")
+        resultado = self.llamar("leer_archivo", {"ruta": "puente/clave.md"})
+        self.assertTrue(resultado["isError"])
+        busqueda = self.llamar("buscar_texto", {"texto": "no debe leerse"})
+        self.assertNotIn("no debe leerse", busqueda["content"][0]["text"])
+        self.assertNotIn("puente", self.llamar("listar_directorio", {})["content"][0]["text"])
+        self.assertEqual((self.afuera / "clave.md").read_text(encoding="utf-8"), "no debe leerse\n")
+
+    def test_stdio_se_recupera_de_json_invalido_y_solicitud_escalar(self):
+        ruta = Path(__file__).resolve().parent.parent / "evaluacion" / "servidor_lectura_boveda.py"
+        entrada = '{\n42\n' + json.dumps({"jsonrpc": "2.0", "id": 7, "method": "ping"}) + '\n'
+        r = subprocess.run([sys.executable, "-I", str(ruta), "--root", str(self.raiz)],
+                           input=entrada, capture_output=True, text=True, encoding="utf-8", timeout=10)
+        self.assertEqual(r.returncode, 0, r.stderr)
+        respuestas = [json.loads(l) for l in r.stdout.splitlines()]
+        self.assertEqual(respuestas[0]["error"]["code"], -32700)
+        self.assertEqual(respuestas[1]["error"]["code"], -32600)
+        self.assertEqual(respuestas[2], {"jsonrpc": "2.0", "id": 7, "result": {}})
+
+    def test_no_hay_herramienta_de_escritura(self):
+        msg = {"jsonrpc": "2.0", "id": 9, "method": "tools/call",
+               "params": {"name": "escribir_archivo", "arguments": {"ruta": "Notas/nuevo.md"}}}
+        respuesta = self.servidor.responder(msg, self.raiz)
+        self.assertIn("error", respuesta)
+        self.assertIn("herramienta desconocida", respuesta["error"]["message"])
+        self.assertFalse((self.raiz / "Notas" / "nuevo.md").exists())
+
+    def test_protocolo_lista_solo_herramientas_de_lectura(self):
+        inicio = self.servidor.responder({"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {}}, self.raiz)
+        self.assertIn("protocolVersion", inicio["result"])
+        lista = self.servidor.responder({"jsonrpc": "2.0", "id": 2, "method": "tools/list"}, self.raiz)
+        nombres = {h["name"] for h in lista["result"]["tools"]}
+        self.assertEqual(nombres, {"listar_directorio", "leer_archivo", "buscar_texto"})
+        for herramienta in lista["result"]["tools"]:
+            self.assertTrue(herramienta["annotations"]["readOnlyHint"])
+            self.assertFalse(herramienta["annotations"]["destructiveHint"])
+            self.assertFalse(herramienta["annotations"]["openWorldHint"])
+        notificacion = {"jsonrpc": "2.0", "method": "notifications/initialized"}
+        self.assertIsNone(self.servidor.responder(notificacion, self.raiz))
 
 
 if __name__ == "__main__":

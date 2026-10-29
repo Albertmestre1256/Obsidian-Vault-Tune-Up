@@ -1,5 +1,24 @@
 # Cambios
 
+## Calibración de lectura — 2026-10-28
+
+- Claude Code con cuenta directa y Sonnet 5.5: consulta de calibración correcta con citas verificadas en las dos condiciones; sin afirmar eficiencia del kit.
+- Codex: bloqueo MCP por aprobación pendiente, conservado como fallo de acceso. Detectado y documentado un error en la regla de parada del ejecutor experimental externo.
+- Lector MCP 1.2: anotaciones de lectura sin efectos destructivos. Preparada una configuración que permite únicamente las tres herramientas de lectura, sin ampliar permisos de shell o escritura; pendiente de comprobar dentro de Codex.
+
+## Revisión del lector de evaluación — 2026-10-28
+
+- Lectura real por rangos en notas grandes, validación de límites y numeración, y salida acotada.
+- Continuación con offset en búsqueda/listado; errores de codificación o acceso explícitos para no inferir ausencias falsas.
+- Recuperación del transporte stdio tras mensajes inválidos y prueba de confinamiento con junctions NTFS.
+- 36 pruebas ejecutadas: 35 correctas y una omitida por permisos de enlaces simbólicos. Sin nuevas sesiones de modelos.
+
+## Sin publicar — 0.3-borrador (2026-10-27)
+
+- Evaluación: `evaluacion/servidor_lectura_boveda.py`, un servidor MCP de solo lectura confinado a la copia del intento. Sirve cuando el cliente bloquea comandos de lectura; no es parte del flujo de la persona usuaria.
+- Protocolo: una sesión medida se acepta solo si el modelo reportado coincide con el solicitado; un destino local que no responde se registra como fallo técnico de infraestructura; el fallo de acceso no cuenta como medición de calidad.
+- Pruebas: 27 pruebas automáticas (21 previas y 6 nuevas del servidor de lectura). Una prueba de enlaces simbólicos se omite si la máquina no permite crearlos.
+
 ## v0.2 — 2026-10-21
 
 Primera versión preparada para publicarse. Todavía no se publicó.

@@ -1,4 +1,4 @@
-# Fase 1: diagnóstico (solo lectura)
+# Paso 2: diagnóstico (solo lectura)
 
 **Objetivo:** describir la bóveda tal como está, sin cambiar nada. El resultado es un informe que sirve de base para el plan.
 
@@ -7,7 +7,7 @@
 **Con Python (recomendado):**
 
 ```text
-python -B herramientas/diagnostico.py <bóveda> <trabajo>/diagnostico-datos.json --referencia plantillas/00_vault-rules.md
+python -B herramientas/diagnostico.py <origen-o-copia-de-lectura> <trabajo>/diagnostico-datos.json --referencia plantillas/00_vault-rules.md
 ```
 
 Hace los pasos 2 a 11 en segundos. Opciones útiles:
@@ -20,9 +20,15 @@ El script da materia prima: la IA revisa a mano cada caso dudoso antes de pasarl
 - 7 hallazgos automáticos no eran problemas: subnodos que sí estaban en el mapa, excepciones declaradas y una fila sin hora.
 - 2 tenían una causa distinta de la aparente: contenido oculto y un bloque generado.
 
-Sin Python, se hacen los mismos pasos con las herramientas de archivos; con más de unas decenas de notas no es viable.
+Sin Python, usar las herramientas equivalentes de archivos de la IA, por lotes si hace falta. Declarar las comprobaciones incompletas; no exigir programación a la persona ni estimar resultados como verificados.
 
-## Pasos
+## Tres momentos
+
+1. Confirmar acceso y preparar inventario sin escritura.
+2. Revisar los hallazgos 1 a 11 de abajo, sin valores privados.
+3. Guardar diagnóstico y mediciones fuera de la bóveda; seguir al paso 3.
+
+## Revisión detallada
 
 Se hacen en orden. Si un paso no se puede hacer, se anota y se sigue.
 
@@ -30,16 +36,16 @@ Se hacen en orden. Si un paso no se puede hacer, se anota y se sigue.
 - Confirmar la ruta de la bóveda y que se puede leer.
 - Anotar si hay `.git/` (sirve de respaldo, pero no se toca).
 - Anotar si hay sincronización (OneDrive, Dropbox, iCloud, Google Drive, Obsidian Sync).
-- Mirar las fechas de modificación más recientes. Si hay cambios de la última hora, otra sesión puede estar escribiendo: avisar (regla 15).
+- Mirar las fechas de modificación más recientes. Si hay cambios de la última hora, otra sesión puede estar escribiendo: avisar y comprobar estabilidad de la captura. La copia aislada puede trabajarse mientras el original siga en uso.
 
 ### 2. Inventario
 - Estructura de carpetas. De las ocultas, solo los nombres.
 - Archivos por extensión y notas más grandes. Archivos sueltos en la raíz.
-- Notas que no son UTF-8 (por ejemplo, UTF-16): las herramientas las omiten.
+- Notas que no son UTF-8 (por ejemplo, UTF-16): el auxiliar las omite. Declarar la excepción y acordar un método compatible sin convertirlas por iniciativa propia.
 - **Nombres con `:` `*` `?` `"` `<` `>` `|`.** En Windows, un nombre con `:` crea un archivo vacío y guarda el texto en un flujo alternativo de NTFS, que Obsidian y git no ven. Se anota cada uno con su tamaño: es contenido oculto para recuperar.
 
 ### 3. Reglas, entrada y mapa
-- ¿Hay reglas propias? ¿Dónde? ¿Coinciden con la plantilla del kit?
+- ¿Hay reglas propias? ¿Dónde? ¿Qué diferencias hay con la plantilla del kit? No sustituir reglas por esa diferencia.
 - ¿Hay una nota de entrada (`LEER_PRIMERO.md` u otra) y un mapa general (`INDICE.md` u otro)?
 - Otras instrucciones para IA en la raíz (`AGENTS.md`, `CLAUDE.md`, `README.md`): una línea cada una.
 - Contradicciones entre reglas, o entre el mapa y las reglas (por ejemplo, dos plazos distintos para lo mismo).
@@ -77,7 +83,7 @@ Primero hay que leer las **excepciones declaradas** de la bóveda: una nota exce
 - No se cambia nada.
 
 ### 11. Zonas intocables
-Listar lo que protege la regla 10 de la fase 0 y lo que hay en esta bóveda.
+Listar lo que protege la regla 10 de la reglas de trabajo y lo que hay en esta bóveda.
 
 ## Plantilla del informe
 
@@ -101,4 +107,4 @@ Listar lo que protege la regla 10 de la fase 0 y lo que hay en esta bóveda.
 
 ## Criterio de salida
 
-Cada paso tiene hallazgos revisados o la nota «sin hallazgos». No se pasa a la fase 2 con pasos sin hacer.
+Cada paso tiene hallazgos revisados o la nota «sin hallazgos». No se pasa a la paso 3 con pasos sin hacer.

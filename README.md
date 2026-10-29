@@ -1,82 +1,83 @@
-> **Crédito principal a [davidkimai](https://github.com/davidkimai):** este kit se basa en su trabajo [Context Engineering](https://github.com/davidkimai/Context-Engineering), a través de [Obsidian Genesis](https://github.com/Albertmestre1256/obsidian-genesis).
+> **Crédito principal a [davidkimai](https://github.com/davidkimai):** basado en su trabajo [Context Engineering](https://github.com/davidkimai/Context-Engineering), a través de [Obsidian Genesis](https://github.com/Albertmestre1256/obsidian-genesis).
 
 # Obsidian Vault Tune-up
 
-**Ordená y aligerá una bóveda de Obsidian que ya existe, con ayuda de una IA, sin perder nada.**
+**Conversá con una IA y recibí una copia de tu bóveda de Obsidian organizada, conectada y más fácil de consultar.**
 
-Tune-up es una serie de órdenes en markdown, con unos scripts opcionales, para que una IA con acceso a tus archivos reacomode tu bóveda. Al terminar, la bóveda tiene reglas claras, un mapa, un índice por proyecto, un índice de líneas en cada nota y un registro de cambios. Así cualquier IA encuentra lo que necesita leyendo poco: menos tokens, menos confusión y menos errores.
+Vos elegís qué temas deben ir juntos y aprobás las reglas. La IA organiza una copia, conserva el contenido, mejora los enlaces y prepara índices para leer solo lo necesario. Tu bóveda original permanece intacta y vos decidís si reemplazarla.
 
-Es el hermano de [Obsidian Genesis](https://github.com/Albertmestre1256/obsidian-genesis): **Genesis crea bóvedas nuevas; Tune-up adapta las que ya tenés** a la misma estructura.
+El kit son instrucciones y plantillas Markdown. No necesitás programar ni ejecutar comandos. Las herramientas de archivos de la IA hacen el trabajo; hay cuatro scripts opcionales para cálculos y comprobaciones exactas. [Genesis](https://github.com/Albertmestre1256/obsidian-genesis) crea bóvedas nuevas; Tune-up adapta bóvedas existentes respetando sus nombres y preferencias.
 
-## Cómo se usa
+## Empezar con una IA instalada
 
-1. **Descargá este repositorio** en una carpeta **fuera** de tu bóveda.
-2. **Abrí una IA que pueda leer y escribir archivos** (Claude Code, Codex, OpenCode u otra) en la carpeta del kit, y dale acceso también a tu bóveda.
-3. **Escribile:**
+Descargá este repositorio fuera de tu bóveda, abrilo con una IA que tenga acceso a archivos y escribile:
 
-   > Leé `AGENTS.md` y hacé el diagnóstico de mi bóveda en `<ruta de tu bóveda>`.
+> Leé AGENTS.md. Quiero organizar mi bóveda en `<ruta original>` y recibir una copia independiente en `<carpeta nueva>`. Primero preguntame qué temas o notas quiero mantener juntos y proponeme las reglas. No cambies el original.
 
-La IA trabaja por fases. Antes de cambiar cualquier cosa te muestra un plan con acciones numeradas, y vos aprobás las que quieras.
+Recibís una carpeta nueva que podés abrir como otra bóveda en Obsidian. El kit no reemplaza el original.
 
-## Qué hace y qué no hace
+## Empezar con una IA web
 
-| Hace | No hace |
+Usá una IA que pueda recibir archivos, modificarlos y devolver ZIP descargables. Adjuntá un ZIP de tu bóveda y los archivos de este kit, y escribile:
+
+> Leé AGENTS.md. Quiero que organices una copia de la bóveda adjunta y me devuelvas un ZIP con el resultado. Primero preguntame qué temas o notas quiero mantener juntos y proponeme las reglas. Conservá todo el contenido.
+
+La IA comprueba primero que puede procesar y entregar los archivos. Si no tiene esas capacidades, no puede completar Tune-up desde ese chat. No necesitás publicar ni sincronizar tu bóveda. Conservá una copia local al preparar el ZIP de entrada: contenido especial de NTFS puede no viajar en un ZIP convencional; la IA debe comprobarlo, no asumirlo.
+
+## Los diez pasos
+
+La IA lee las [reglas de trabajo](ordenes/00-reglas-de-trabajo.md) y solo el paso que está usando.
+
+| Paso | Qué hace la IA |
 |---|---|
-| Diagnostica la bóveda sin escribir nada | Borrar (lo que sobra va a `_archivo/`) |
-| Propone un plan con IDs que vos aprobás | Reescribir el texto de tus notas |
-| Respalda y verifica antes del primer cambio | Inventar estados, fechas o propósitos |
-| Mueve, indexa y enlaza según lo aprobado | Agregar ni quitar datos privados sin tu permiso |
-| Reduce el contexto de arranque (con aprobación) | Tocar `.git`, `.obsidian`, plugins o scripts propios |
-| Registra cada cambio y quién lo hizo | Publicar, sincronizar ni subir nada |
+| 1. [Alcance](ordenes/01-alcance.md) | Confirma el entorno, el idioma y la entrega |
+| 2. [Diagnóstico](ordenes/02-diagnostico.md) | Revisa la bóveda sin modificarla y mide el contexto |
+| 3. [Preferencias y plan](ordenes/03-preferencias-y-plan.md) | Pregunta qué debe ir junto y acuerda la organización |
+| 4. [Reglas](ordenes/04-reglas.md) | Propone reglas y espera su aprobación |
+| 5. [Copia independiente](ordenes/05-copia-de-trabajo.md) | Crea y verifica la copia de trabajo |
+| 6. [Organización](ordenes/06-organizacion.md) | Agrupa por temática; lo dudoso va a Sin clasificar |
+| 7. [Navegación](ordenes/07-navegacion.md) | Incorpora reglas, mapa, entrada e índices de nodos |
+| 8. [Compactación](ordenes/08-compactacion.md) | Reduce repeticiones con aprobación y conservación |
+| 9. [Índices de líneas](ordenes/09-indices-de-lineas.md) | Añade rangos exactos y descripciones de hasta diez palabras |
+| 10. [Validación y entrega](ordenes/10-validacion-y-entrega.md) | Verifica conservación, mide el resultado y entrega carpeta o ZIP |
 
-## Las fases
+No necesitás aprender los números ni aprobar cada movimiento por separado: la IA explica un plan concreto, registra tu aprobación y continúa con ese alcance. Las fusiones, modificaciones de reglas existentes y cualquier propuesta de eliminación se consultan explícitamente. Nada se elimina por defecto.
 
-La IA lee [las reglas de trabajo](ordenes/00-reglas-de-trabajo.md) y **solo la fase en curso**, para no cargar todo el kit de una vez.
+## Qué se conserva
 
-| Fase | Orden | Escribe en la bóveda | Necesita tu aprobación |
-|---|---|---|---|
-| 0 | [Reglas de trabajo](ordenes/00-reglas-de-trabajo.md) | No | — |
-| 1 | [Diagnóstico](ordenes/01-diagnostico.md) | No | No |
-| 2 | [Plan con IDs](ordenes/02-plan.md) | No | **Sí** |
-| 3 | [Respaldo verificado](ordenes/03-respaldo.md) | No | Incluido en el plan |
-| 4 | [Estructura y movimientos](ordenes/04-estructura.md) | Sí | Por ID |
-| 5 | [Nodos, fichas y mapa](ordenes/05-nodos-y-mapas.md) | Sí | Por ID |
-| 6 | [Índices de líneas](ordenes/06-indices-de-lineas.md) | Sí | Por ID |
-| 7 | [Optimización](ordenes/07-optimizacion.md) (opcional) | Sí | **Por cada acción** |
-| 8 | [Verificación y cierre](ordenes/08-verificacion.md) | Solo el informe | No |
+- Todas las notas, adjuntos y versiones. Las preferencias del usuario mandan sobre una clasificación automática.
+- Reglas y nombres existentes, salvo cambios propuestos y aprobados.
+- Contenido que no se pueda clasificar: va a **Sin clasificar**, en tu idioma, con navegación desde el mapa.
+- Originales de las consolidaciones, recuperables dentro de la entrega y fuera del recorrido habitual de la IA. No se confunde compactar con borrar.
+- Configuraciones, archivos de terceros y bloques generados: se conservan; no se ejecutan ni alteran por iniciativa del kit.
 
-## Seguridad
+La IA registra las rutas anteriores y nuevas, las decisiones y las comprobaciones. No copia valores privados a los informes. La programación sirve para verificar el trabajo, no para obligarte a operar una aplicación adicional.
 
-- **Nada se borra.** Lo que sobra se archiva con su ruta original anotada.
-- **Respaldo primero.** No se escribe nada hasta que hay una copia completa y verificada (en Windows, incluso el contenido oculto en flujos alternativos de NTFS).
-- **Aprobación por ID.** Un «sí» general no alcanza; las acciones de riesgo alto se aprueban de a una.
-- **Una sola sesión escribiendo.** Si mientras tanto otra IA o persona cambia la bóveda, la verificación lo detecta y la IA para.
-- **Tus datos privados no salen de la bóveda:** los informes dicen dónde están, nunca qué dicen.
+## Cómo se evalúa el resultado
 
-## Herramientas (opcionales)
+La copia debe conservar la información, respetar las agrupaciones y reglas aprobadas y permitir navegar desde Leer primero → reglas → mapa → nodo → rango de nota. Los rangos incluyen las líneas del propio índice; cada descripción ocupa como máximo diez palabras.
 
-Están en `herramientas/` y usan solo Python estándar 3.8+. Ninguna escribe en la bóveda, salvo `indice_lineas.py apply` sobre las notas que le indiques. Se corren con `python -B` para que no dejen `__pycache__`.
+La IA compara antes y después: contexto necesario para una misma consulta, repeticiones retiradas del recorrido activo, enlaces y conservación. Informa si no hubo ahorro. Caracteres / 4 es solo una estimación de tokens; no demuestra ahorro real en todas las tareas. La lectura y escritura deben poder hacerse sin cargar la bóveda completa; después de editar se actualiza el índice correspondiente.
 
-| Script | Fase | Qué hace |
-|---|---|---|
-| `diagnostico.py` | 1 | Inventario, reglas y mapa, nodos, índices de líneas, registro, enlaces rotos, bloques generados, duplicados, peso de contexto y ubicación de datos privados (sin los valores) |
-| `respaldo.py` | 3 | Copia, manifiesto SHA-256 (con flujos alternativos en Windows) y comparación |
-| `indice_lineas.py` | 6 | Revisa o recalcula los índices de líneas. Conserva las descripciones, la forma del índice, la codificación y los saltos de línea de cada nota |
-| `verificar.py` | 8 | Compara con el respaldo: cambios fuera del plan, herramientas, contenido oculto, datos privados e índices; mide el arranque |
+Para medir eficiencia de forma auditable, usar el [protocolo de evaluación](evaluacion/PROTOCOLO.md): calidad y consumo en las mismas tareas, sesiones nuevas, costes de preparación y mantenimiento, y resultados reproducibles. Una reducción del grafo no acredita ahorro de tokens.
 
-Sin Python, cada fase describe cómo hacerlo con las herramientas de archivos de la IA.
+## Herramientas auxiliares
 
-Pruebas: `python -B -m unittest discover -s tests`.
+La IA puede usar herramientas equivalentes de su entorno. Estos scripts usan solo Python estándar 3.8+, sin dependencias; los ejecuta la IA, no la persona.
 
-## Estado del proyecto
+| Herramienta | Uso |
+|---|---|
+| `herramientas/diagnostico.py` | Inventario y hallazgos sin valores privados |
+| `herramientas/respaldo.py` | Copia y manifiesto SHA-256, incluidos flujos NTFS en Windows |
+| `herramientas/indice_lineas.py` | Rangos exactos y descripciones breves, sin modificar el cuerpo |
+| `herramientas/verificar.py` | Cambios esperados, movimientos declarados, flujos e índices; no sustituye la revisión del contenido consolidado |
 
-**v0.2, en construcción.** Probado sobre la copia de una bóveda real de unas 300 notas (diagnóstico, plan, respaldo, dos acciones de riesgo bajo y verificación) y con una prueba automática sobre una bóveda desordenada ficticia. Falta:
+Ver [pruebas y límites](PRUEBAS.md). Para desarrollar: `python -B -m unittest discover -s tests -v`.
 
-- probarlo con personas y con bóvedas desordenadas reales;
-- una prueba de arranque hecha por una sesión nueva;
-- revisión visual en Obsidian;
-- versiones del README en otros idiomas.
+## Estado
 
-## Licencia y créditos
+**v0.3 en desarrollo.** El flujo adapta los objetivos acordados: copia independiente, entrevista temática, reglas aprobadas, Sin clasificar, conservación y contexto reducido. Las capacidades de la IA web dependen de su entorno. Las pruebas automáticas y locales no sustituyen una prueba completa con personas ni una sesión de contexto limpio. La evaluación de eficiencia usa archivos y trazas; la inspección visual es opcional para valorar presentación.
 
-[MIT](LICENSE). Basado en [Context Engineering](https://github.com/davidkimai/Context-Engineering) de davidkimai y en [Obsidian Genesis](https://github.com/Albertmestre1256/obsidian-genesis).
+## Licencia
+
+[MIT](LICENSE). Se mantienen los créditos de Context Engineering y Obsidian Genesis.

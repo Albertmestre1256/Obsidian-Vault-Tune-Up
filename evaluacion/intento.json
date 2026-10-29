@@ -1,0 +1,33 @@
+{
+  "aviso": "PLANTILLA: null es desconocido; los ceros solo se usan si fueron observados",
+  "trial_id": null,
+  "experiment_id": null,
+  "environment_id": null,
+  "question_id": null,
+  "category": null,
+  "repeat": null,
+  "arm": null,
+  "session_id": null,
+  "started_at": null,
+  "finished_at": null,
+  "status": null,
+  "error_and_retry_policy": null,
+  "strict_success": null,
+  "rubric_scores_and_rationale": null,
+  "usage_normalized": {
+    "input_tokens": null,
+    "output_tokens": null,
+    "cached_input_subset": null,
+    "cache_write_subset_if_included_in_input": null,
+    "reasoning_output_subset": null,
+    "coverage": null,
+    "source_and_mapping": null
+  },
+  "cost": {"amount": null, "currency": null, "kind": null, "rates_and_date": null},
+  "wall_seconds": null,
+  "reads": {"calls": null, "unique_files": null, "returned_characters": null, "ranges_and_search_results": null},
+  "artifacts_sha256": {"prompt": null, "response": null, "trace": null, "raw_usage": null, "final_state_or_diff": null},
+  "conservation_and_unauthorized_changes": null,
+  "grader_and_blinding": null,
+  "exclusions_and_missing_data": null
+}

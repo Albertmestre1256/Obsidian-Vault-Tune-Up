@@ -1,0 +1,69 @@
+{
+  "version_protocolo": "1.0",
+  "estado": "borrador; completar y congelar antes de ejecutar",
+  "experimento_id": null,
+  "fecha_congelacion": null,
+  "commit_kit": null,
+  "estudio": "principal_A_antes_B_kit",
+  "entorno": {
+    "cliente_version": null,
+    "proveedor_modelo_version": null,
+    "modo": null,
+    "parametros_y_campos_no_controlables": null,
+    "instrucciones_sha256_por_condicion": null,
+    "herramientas_permisos_y_configuracion": null,
+    "aislamiento_memoria_hooks_plugins": null,
+    "politica_cache_y_normalizacion_uso": null
+  },
+  "datos": {
+    "manifiesto_A": null,
+    "manifiesto_B": null,
+    "plan_reglas_aprobacion_y_mapa": null,
+    "preguntas_y_claves_sha256": null,
+    "calibracion_excluida": null,
+    "reserva_independiente": null,
+    "ambito": "ficticio o privado; especificar"
+  },
+  "diseno": {
+    "fase": "piloto_exploratorio",
+    "tareas_consulta_por_categoria": {
+      "dato": 4,
+      "combinacion": 4,
+      "vigencia": 4,
+      "abstencion": 4
+    },
+    "tareas_escritura_separadas": 4,
+    "repeticiones": 3,
+    "semilla_orden": 1729,
+    "calendario_sha256": null,
+    "limite_segundos_por_intento": null,
+    "limite_lecturas_y_salida_si_aplica": null,
+    "presupuesto_y_regla_de_parada": null,
+    "politica_reintentos_y_fallos_tecnicos": null,
+    "pesos_categorias": "iguales en piloto",
+    "rubrica_congelada_y_revision_ciega": null,
+    "auditoria_humana_fraccion_y_semilla": null,
+    "salidas_B_independientes_si_se_evalua_proceso": null,
+    "comparador_IA_sin_kit_si_aplica": null,
+    "estudio_usabilidad_separado_si_aplica": null
+  },
+  "analisis": {
+    "principales": [
+      "exito_estricto",
+      "entrada_acumulada_todos_los_intentos"
+    ],
+    "secundarias": [
+      "salida",
+      "coste_por_exito",
+      "lecturas",
+      "tiempo",
+      "escritura",
+      "mantenimiento"
+    ],
+    "faltantes": "N/D; no convertir a cero ni estimar ahorro global con cobertura parcial",
+    "intervalos": "piloto: bootstrap pareado por tarea, 10000 remuestreos, semilla 1729; exploratorio",
+    "regla_piloto": "conservacion obligatoria; presentar cambios de calidad y recursos sin afirmar eficacia confirmada",
+    "criterios_confirmatorios_y_calculo_muestral": null,
+    "version_analisis_y_manifiesto_final": null
+  }
+}
