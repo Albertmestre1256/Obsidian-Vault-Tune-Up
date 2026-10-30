@@ -1,11 +1,12 @@
 > [!info]- Índice de esta nota (líneas)
-> - Líneas 1–8: Este índice
-> - Líneas 10–13: Registro de coordinación y resultados
-> - Líneas 14–23: R001 — Documentación inicial — 2026-10-29
-> - Líneas 24–34: R002 — P01: reproducción y mitigación local — 2026-10-29
-> - Líneas 35–44: R003 — P02: auditoría offline de navegación — 2026-10-30
-> - Líneas 45–65: Plantilla para una nueva entrada
-> - Líneas 66–70: Requisitos de una entrada de cierre
+> - Líneas 1–9: Este índice
+> - Líneas 11–14: Registro de coordinación y resultados
+> - Líneas 15–24: R001 — Documentación inicial — 2026-10-29
+> - Líneas 25–35: R002 — P01: reproducción y mitigación local — 2026-10-29
+> - Líneas 36–45: R003 — P02: auditoría offline de navegación — 2026-10-30
+> - Líneas 46–54: R004 — P08/P09: borradores de rúbrica y prerregistro — 2026-10-30
+> - Líneas 55–75: Plantilla para una nueva entrada
+> - Líneas 76–80: Requisitos de una entrada de cierre
 
 # Registro de coordinación y resultados
 
@@ -41,6 +42,15 @@ Añadir entradas fechadas; no borrar intentos fallidos ni reemplazar conclusione
 - Límite: un solo par con corpus, historial y salidas distintos; la descomposición describe esas trazas, no predice ahorro causal.
 - Resultado: [diseño P02](../P02-NAVEGACION.md) fija una comparación futura con corpus y objetivos constantes, y condiciones de lectura agrupada/progresiva. No se afirma eficacia.
 - Responsable al inicio: IA:Codex; liberado al salir. P02 sigue abierto: P08/P09 y presupuesto nuevo preceden a la comparación; el tope exploratorio previo de cuatro sesiones ya se consumió.
+
+## R004 — P08/P09: borradores de rúbrica y prerregistro — 2026-10-30
+
+- Autor: IA:Codex (Codex desktop, GPT-6), por indicación de Albert de continuar el diagnóstico.
+- Alcance: preparar el contrato de puntuación semántica P08 y un prerregistro de factibilidad específico para P02. Solo documentación; sin sesiones nuevas ni cambios a las bóvedas.
+- Resultado: P08 separa tipos, equivalencia semántica, evidencia y abstención, y prohíbe alterar las puntuaciones automáticas históricas. P09 propone dos pares balanceados (cuatro sesiones), exclusivamente para factibilidad; no permite afirmar eficacia.
+- Límite: ambos borradores esperan revisión/congelación; aún falta revisor independiente, hash/configuración final y nuevo presupuesto autorizado. El tope previo de cuatro sesiones está consumido.
+- Referencias: [rúbrica P08](../P08-RUBRICA.md); [prerregistro P09 para P02](../P09-PREREGISTRO-P02.md). No se ejecutaron pruebas ni modelos.
+- Responsable liberado: IA:Codex. Próximo paso: revisar y congelar alcance con Albert; obtener revisor y autorización antes de sesiones.
 
 ## Plantilla para una nueva entrada
 

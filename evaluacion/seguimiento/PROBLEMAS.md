@@ -127,26 +127,26 @@ Al tomar trabajo, reemplazar Sin asignar por IA, herramienta y fecha; indicar el
 ## P08 — Tipos de salida ambiguos
 
 - Prioridad: Media.
-- Etapa: Diseñar prueba. Responsable: Sin asignar.
+- Etapa: Rúbrica en borrador; congelación pendiente. Responsable: Sin asignar. Último trabajo: IA:Codex (Codex desktop), 30/10/2026.
 - Evidencia actual: Defecto del evaluador. Tres campos correctos de Brisa fallan por tipo en comparación exacta; el prompt permitía texto o número.
 - Localizador: calidad-sin-consumo.json; revisión semántica. Las referencias locales se resuelven mediante F01–F08 en OBSERVACIONES-2026-10-29.md.
 - Dependencias: Ninguna.
-- Próxima acción: Fijar esquema por campo y reglas semánticas antes de nuevos ensayos.
+- Próxima acción: Revisar y congelar P08 para la tarea P02; asignar revisión independiente antes de abrir las salidas.
 - Criterio de aceptación: Valores equivalentes reciben la misma nota en A/B; tipos y casos límite fijados antes de nuevas sesiones.
-- Implementación y validación: pendientes. Añadir reproducción, resultados, diff/commit y conservación cuando existan; no marcar como realizado lo que solo está propuesto.
-- Registro de intentos: sin entradas específicas todavía; ver R001 para el alta documental.
+- Implementación y validación: contrato semántico redactado; no se modificó el evaluador ni se re-puntuaron sesiones históricas. Diseño en P08-RUBRICA.md.
+- Registro de intentos: R004 documenta el borrador; congelación y aplicación pendientes.
 
 ## P09 — Dos nodos y una repetición
 
 - Prioridad: Alta.
-- Etapa: Documentar. Responsable: Sin asignar.
+- Etapa: Prerregistro P02 en borrador; presupuesto y revisión independiente pendientes. Responsable: Sin asignar. Último trabajo: IA:Codex (Codex desktop), 30/10/2026.
 - Evidencia actual: Límite de inferencia. No aísla componentes ni establece causalidad, mínimo de contexto o eficacia general.
 - Localizador: plan.json; N01–N04. Las referencias locales se resuelven mediante F01–F08 en OBSERVACIONES-2026-10-29.md.
-- Dependencias: P07 y P08.
-- Próxima acción: Preregistrar ablaciones, orden balanceado y revisión independiente en nodos nuevos.
+- Dependencias: P07 y P08; cuatro sesiones exploratorias previas agotadas.
+- Próxima acción: Revisar P09, fijar hash/modelo/entorno, nombrar revisor y pedir presupuesto nuevo antes de congelar o ejecutar.
 - Criterio de aceptación: Preregistro y presupuesto fijados; revisión sin consumo y al menos una revisión independiente antes de afirmar mejora.
-- Implementación y validación: pendientes. Añadir reproducción, resultados, diff/commit y conservación cuando existan; no marcar como realizado lo que solo está propuesto.
-- Registro de intentos: sin entradas específicas todavía; ver R001 para el alta documental.
+- Implementación y validación: diseño de factibilidad propuesto con dos pares balanceados; no congelado ni ejecutado. Diseño en P09-PREREGISTRO-P02.md.
+- Registro de intentos: R004 documenta el borrador; no hubo sesiones nuevas.
 
 ## P10 — Versión de creación de B incompleta
 
