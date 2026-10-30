@@ -9,7 +9,7 @@
 
 # Coordinación del diagnóstico de eficiencia
 
-Estado al 29/10/2026: diez problemas registrados; P01 reproducido y mitigado localmente, con validación del flujo pendiente. Este directorio coordina el desarrollo y la investigación del kit. No añade requisitos a quien quiere organizar su bóveda.
+Estado al 30/10/2026: diez problemas registrados; P01 mitigado localmente, con adopción por agente pendiente. P02 tiene análisis offline y diseño controlado preparados; no se iniciaron nuevas sesiones de Claude Code. P08/P09 y un presupuesto nuevo preceden a las comparaciones de comprensión y ahorro. Este directorio coordina el desarrollo y la investigación del kit; no añade requisitos a quien quiere organizar su bóveda.
 
 ## Retomar con poco contexto
 
@@ -29,7 +29,7 @@ Un responsable declarado no equivale a un bloqueo técnico. Releer la ficha y el
 
 ## Orden recomendado
 
-Empezar por P01, la búsqueda filtrada, y P08, la rúbrica. P04 permite estudiar rangos en paralelo lógico con esos problemas, pero cualquier trabajo simultáneo debe respetar responsables y archivos separados. Preparar P07 y P09 antes de nuevas comparaciones medidas. Después aislar P02, P03, P05 y P06; mantener P10 visible si no se puede recuperar la procedencia histórica.
+P01 tiene una mitigación local validada; su adopción por agente queda pendiente. P02 ya separó descriptivamente la lectura progresiva del reintento P01; su comparación controlada espera P08 (rúbrica) y P09 (prerregistro y presupuesto). P04 puede prepararse por separado; cualquier trabajo simultáneo debe respetar responsables y archivos separados. Mantener P03, P05, P06 y P10 visibles.
 
 El diagnóstico disponible permite preparar estas tareas, no afirmar que las soluciones ya funcionan. No interpretar este registro como autorización para consumir nuevas cuotas o cambiar la bóveda original. Usar las autorizaciones vigentes; definir el alcance de una nueva campaña antes de iniciarla y no repetir aprobaciones que ya cubran el mismo trabajo.
 

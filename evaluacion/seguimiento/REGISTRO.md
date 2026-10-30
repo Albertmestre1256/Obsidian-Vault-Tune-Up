@@ -1,10 +1,11 @@
 > [!info]- Índice de esta nota (líneas)
-> - Líneas 1–7: Este índice
-> - Líneas 9–12: Registro de coordinación y resultados
-> - Líneas 13–22: R001 — Documentación inicial — 2026-10-29
-> - Líneas 23–33: R002 — P01: reproducción y mitigación local — 2026-10-29
-> - Líneas 34–54: Plantilla para una nueva entrada
-> - Líneas 55–59: Requisitos de una entrada de cierre
+> - Líneas 1–8: Este índice
+> - Líneas 10–13: Registro de coordinación y resultados
+> - Líneas 14–23: R001 — Documentación inicial — 2026-10-29
+> - Líneas 24–34: R002 — P01: reproducción y mitigación local — 2026-10-29
+> - Líneas 35–44: R003 — P02: auditoría offline de navegación — 2026-10-30
+> - Líneas 45–65: Plantilla para una nueva entrada
+> - Líneas 66–70: Requisitos de una entrada de cierre
 
 # Registro de coordinación y resultados
 
@@ -30,6 +31,16 @@ Añadir entradas fechadas; no borrar intentos fallidos ni reemplazar conclusione
 - Implementación: paso 2 indica verificar ceros contradictorios y usar path exacto para carpetas con espacios; no sustituirlos por comodines. Informe en evaluacion/P01-GREP.md; código experimental y trazas fuera del repositorio.
 - Límite: mitigación local, no reparación del cliente ni prueba de que una IA siga la instrucción. Sin ahorro de tokens acreditado. Reversión del kit: retirar el párrafo añadido al paso 2, conservando evidencia e historial.
 - Estado al salir: P01 mitigado localmente, responsable liberado; continuar con P08/P09 antes de una prueba con agente. La entrada de Obsidian coordina responsables; este registro describe implementación y resultados y no se sincroniza automáticamente.
+
+## R003 — P02: auditoría offline de navegación — 2026-10-30
+
+- Autor: IA:Codex (Codex desktop, GPT-6), por indicación de Albert de continuar con P02.
+- Alcance: revisar eventos N01/N02 y separar rondas del modelo, invocaciones de herramientas y el reintento P01. Sin sesiones nuevas con Claude Code ni cambios a las bóvedas; dos revisiones internas fueron de solo lectura.
+- Base: commit 70b81d04e96217ef3c4a7d701c5ad7406cd1b48d; rama `codex/flujo-10-pasos`; copia y trazas preexistentes bajo I:.
+- Hecho: 4 frente a 6 solicitudes del modelo; 11 frente a 12 invocaciones de herramientas. Una solicitud extra es lectura progresiva del índice temático y las cinco notas; la otra, el reintento del Grep con cero falso de P01.
+- Límite: un solo par con corpus, historial y salidas distintos; la descomposición describe esas trazas, no predice ahorro causal.
+- Resultado: [diseño P02](../P02-NAVEGACION.md) fija una comparación futura con corpus y objetivos constantes, y condiciones de lectura agrupada/progresiva. No se afirma eficacia.
+- Responsable al inicio: IA:Codex; liberado al salir. P02 sigue abierto: P08/P09 y presupuesto nuevo preceden a la comparación; el tope exploratorio previo de cuatro sesiones ya se consumió.
 
 ## Plantilla para una nueva entrada
 

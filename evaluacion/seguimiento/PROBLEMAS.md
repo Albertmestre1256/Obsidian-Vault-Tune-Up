@@ -55,14 +55,14 @@ Al tomar trabajo, reemplazar Sin asignar por IA, herramienta y fecha; indicar el
 ## P02 — Más rondas de navegación
 
 - Prioridad: Alta.
-- Etapa: Diseñar prueba. Responsable: Sin asignar.
-- Evidencia actual: Mecanismo observado. Brisa A realiza 4 solicitudes; B, 6. B separa índice temático de lectura de notas y luego reintenta búsqueda.
+- Etapa: Diseño preparado; comparación controlada pendiente. Responsable activo: Sin asignar. Último trabajo: IA:Codex (Codex desktop), 30/10/2026.
+- Evidencia actual: N01 tiene 4 solicitudes del modelo, 11 invocaciones y 28.959 tokens de entrada acumulada; N02, 6 solicitudes, 12 invocaciones y 50.542 tokens. Una solicitud adicional corresponde a leer el índice temático antes de las cinco notas centrales; la otra, al reintento tras el cero falso de P01. N02 también leyó un índice más. El aumento (+74,5 % de entrada) es descriptivo del par y no se atribuye causalmente a la navegación.
 - Localizador: N01 vs N02, hoja Llamadas. Las referencias locales se resuelven mediante F01–F08 en OBSERVACIONES-2026-10-29.md.
-- Dependencias: P01 para aislar el reintento.
-- Próxima acción: Probar navegación progresiva que permita agrupar lecturas seguras.
+- Dependencias: P01 mitigado localmente; P08 y P09 antes de evaluar comprensión y ahorro.
+- Próxima acción: Comparar lectura agrupada y progresiva con la misma tarea, corpus, objetivos y archivos; eludir el glob defectuoso o usar el filtro P01 validado.
 - Criterio de aceptación: Menos rondas o menor entrada sin perder objetivo, roles, vigencia, rutas ni evidencia en tareas nuevas.
-- Implementación y validación: pendientes. Añadir reproducción, resultados, diff/commit y conservación cuando existan; no marcar como realizado lo que solo está propuesto.
-- Registro de intentos: sin entradas específicas todavía; ver R001 para el alta documental.
+- Implementación y validación: diagnóstico descriptivo; el par N01/N02 no aísla causas ni acredita ahorro. No se ejecutaron sesiones nuevas. Diseño en P02-NAVEGACION.md.
+- Registro de intentos: R003 documenta la auditoría y relevo; comparación experimental pendiente de P08, P09 y presupuesto nuevo.
 
 ## P03 — Búsquedas demasiado amplias
 
