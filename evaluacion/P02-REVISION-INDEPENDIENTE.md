@@ -3,9 +3,9 @@
 > [!info]- Índice de esta nota (líneas)
 > - Líneas 3–8: Este índice
 > - Líneas 10–13: Propósito y alcance
-> - Líneas 14–27: Lista de comprobación
-> - Líneas 28–31: Formato de devolución
-> - Líneas 32–34: Reglas de independencia
+> - Líneas 14–28: Lista de comprobación
+> - Líneas 29–32: Formato de devolución
+> - Líneas 33–35: Reglas de independencia
 
 ## Propósito y alcance
 
@@ -17,6 +17,7 @@ Ficha para revisar antes de congelar el piloto de factibilidad P02. Revisar [el 
 - [ ] N02 y el SHA-256 de su manifiesto identifican el mismo corpus para todas las sesiones; las copias se verifican antes y después.
 - [ ] Las nueve notas y el resultado Glob son iguales en todas las sesiones; el preludio común queda dentro del consumo total y también se informa separado.
 - [ ] Los mensajes de tarea/preludio son idénticos; agrupada y progresiva difieren solo por la secuencia prevista. El mensaje adicional progresivo se cuenta como parte del tratamiento.
+- [ ] El mensaje inicial de preludio no contiene una orden incompatible de producir la respuesta final.
 - [ ] Grep queda excluido de la comparación principal; la tarea limita el juicio sobre proveedor a las cinco notas centrales.
 - [ ] P08 cubre todos los campos requeridos, tipos, abstención, notas/roles, vigencia, destinos y evidencia por condición; las citas aceptables respaldan los hechos.
 - [ ] El esquema JSON y el mapeo de roles del guion coinciden exactamente con los tipos y la clave de evaluación P08.

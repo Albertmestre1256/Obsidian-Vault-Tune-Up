@@ -21,7 +21,7 @@ Prepará el contexto para trabajar en el nodo Brisa. Identificá el objetivo, la
 
 Usá estas claves exactas en datos: entrega.fecha (cadena ISO YYYY-MM-DD), entrega.ubicacion (cadena), presupuesto.monto (entero), presupuesto.unidad (cadena), gasto_ejecutado (booleano), propuesta_aprobada (booleano) y proveedor (cadena o null). Mapeá las cinco notas centrales con estos roles exactos: plan = operativo; acta vigente = fuente_aprobada; presupuesto = presupuesto; propuesta = propuesta_no_aprobada; historia = historico. No asignes el rol manual a estas cinco notas. Explicá cuál manda ante conflicto de fechas. Indicá la ruta editable del presupuesto si cambiara su máximo; no hagas el cambio.
 
-Respondé en español, hasta 650 palabras, con un único JSON sin cercas:
+Cuando recibas la fase que pide la respuesta final, respondé en español, hasta 650 palabras, con un único JSON sin cercas:
 {"objetivo":"...", "datos":{"entrega.fecha":{"valor":"YYYY-MM-DD","evidencia":[{"ruta":"relativa.md","desde":1,"hasta":1}]}, "entrega.ubicacion":{"valor":"...","evidencia":[]}, "presupuesto.monto":{"valor":0,"evidencia":[]}, "presupuesto.unidad":{"valor":"...","evidencia":[]}, "gasto_ejecutado":{"valor":false,"evidencia":[]}, "propuesta_aprobada":{"valor":false,"evidencia":[]}, "proveedor":{"valor":null,"evidencia":[]}}, "notas":[{"ruta":"relativa.md","rol":"..."}], "criterio_vigencia":"...", "destino_trabajo":"relativa.md", "limitaciones":"..."}.
 
 Los valores pueden ser texto, número, booleano o null. Las citas deben corresponder a líneas efectivamente consultadas y respaldar la afirmación. Para el gasto, respetá el alcance explícito de la fuente. La lista fija de rutas excluye descubrimiento de rutas de esta comparación.

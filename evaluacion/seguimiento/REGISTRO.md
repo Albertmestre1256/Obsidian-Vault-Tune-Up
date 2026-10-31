@@ -1,15 +1,16 @@
 > [!info]- Índice de esta nota (líneas)
-> - Líneas 1–12: Este índice
-> - Líneas 14–17: Registro de coordinación y resultados
-> - Líneas 18–27: R001 — Documentación inicial — 2026-10-29
-> - Líneas 28–38: R002 — P01: reproducción y mitigación local — 2026-10-29
-> - Líneas 39–48: R003 — P02: auditoría offline de navegación — 2026-10-30
-> - Líneas 49–57: R004 — P08/P09: borradores de rúbrica y prerregistro — 2026-10-30
-> - Líneas 58–67: R005 — P02: especificación de preludio y clave Brisa —
-> - Líneas 68–77: R006 — P02: auditoría de secuencia y guion — 2026-10-30
-> - Líneas 78–85: R007 — P02: ficha para revisión independiente — 2026-10-30
-> - Líneas 86–106: Plantilla para una nueva entrada
-> - Líneas 107–111: Requisitos de una entrada de cierre
+> - Líneas 1–13: Este índice
+> - Líneas 15–18: Registro de coordinación y resultados
+> - Líneas 19–28: R001 — Documentación inicial — 2026-10-29
+> - Líneas 29–39: R002 — P01: reproducción y mitigación local — 2026-10-29
+> - Líneas 40–49: R003 — P02: auditoría offline de navegación — 2026-10-30
+> - Líneas 50–58: R004 — P08/P09: borradores de rúbrica y prerregistro — 2026-10-30
+> - Líneas 59–68: R005 — P02: especificación de preludio y clave Brisa —
+> - Líneas 69–78: R006 — P02: auditoría de secuencia y guion — 2026-10-30
+> - Líneas 79–86: R007 — P02: ficha para revisión independiente — 2026-10-30
+> - Líneas 87–96: R008 — P02: despejar conflicto del preludio — 2026-10-31
+> - Líneas 97–117: Plantilla para una nueva entrada
+> - Líneas 118–122: Requisitos de una entrada de cierre
 
 # Registro de coordinación y resultados
 
@@ -82,6 +83,16 @@ Añadir entradas fechadas; no borrar intentos fallidos ni reemplazar conclusione
 - Cambio: se añadió una lista de control y formato de devolución en [P02-REVISION-INDEPENDIENTE.md](../P02-REVISION-INDEPENDIENTE.md); P09 y el seguimiento enlazan la ficha.
 - Resultado: material listo para revisión; no equivale a una revisión independiente ni congela el protocolo. No hubo sesiones, pruebas ni cambios en bóvedas.
 - Próximo paso: asignar persona revisora independiente, registrar objeciones y responder antes de congelar; presupuesto nuevo sigue pendiente.
+
+## R008 — P02: despejar conflicto del preludio — 2026-10-31
+
+- Autor: IA:Codex (Codex desktop), por indicación de Albert de continuar.
+- Alcance: autorrevisión del guion, P08/P09 y ficha; sin ejecutar modelos.
+- Hecho observado: el mensaje común pedía JSON final mientras el preludio pedía responder solo `PRELUDIO_LISTO`.
+- Cambio: el guion ahora condiciona el JSON a recibir la fase de respuesta final; la ficha independiente incluye este chequeo. Hash candidato del guion: `cb83fdea71e3de9b5e17a6c5101b5f68e91e9027e254d592124324326de7830e`.
+- Verificación: `indice_lineas.py check` OK en guion, ficha y P09; `git diff --check` limpio. El hash del manifiesto N02 se cotejó y conservó.
+- Límites: autorrevisión, no revisión independiente; no se congeló el protocolo ni se ejecutaron sesiones. El presupuesto nuevo sigue pendiente.
+- Próximo paso: revisor independiente aplica la ficha a guion, P08 y P09; resolver observaciones antes de congelar.
 
 ## Plantilla para una nueva entrada
 
