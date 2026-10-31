@@ -3,9 +3,9 @@
 > - Líneas 10–13: P08: rúbrica de calidad
 > - Líneas 14–29: Contrato de salida
 > - Líneas 30–38: Reglas de puntuación semántica
-> - Líneas 39–57: Clave de evaluación para la tarea Brisa
-> - Líneas 58–61: Evidencia, revisión y cegamiento
-> - Líneas 62–64: Controles retrospectivos y límites
+> - Líneas 39–59: Clave de evaluación para la tarea Brisa
+> - Líneas 60–63: Evidencia, revisión y cegamiento
+> - Líneas 64–66: Controles retrospectivos y límites
 
 # P08: rúbrica de calidad
 
@@ -55,9 +55,11 @@ Aplicar esta clave a la tarea ya fijada en `Brisa-prompt.txt`; no mostrarla al m
 
 Las rutas citadas deben existir en la copia de esa condición y cada rango debe respaldar la afirmación atribuida. Para `proveedor=null`, una cita aislada no demuestra ausencia: se evalúa el registro de las cinco notas centrales efectivamente leídas y una formulación acotada a ellas. Si una fila obligatoria no se informa, puntuarla como omitida; no inferirla de otra respuesta correcta.
 
+Para el piloto P02, ambas condiciones usan la copia organizada N02; aceptar únicamente las rutas de la columna B (N02). Las rutas A (N01) conservan el marco de comparación histórica y no son citas válidas para las sesiones nuevas.
+
 ## Evidencia, revisión y cegamiento
 
-Antes de abrir las nuevas salidas, registrar claves esperadas por tarea, variantes aceptables, citas válidas por condición, errores críticos y versión del contrato. Revisar la salida con etiquetas A/B ocultas y sin tokens, duración ni orden de ejecución visibles. Dos revisores aplican la misma ficha; al menos uno debe ser independiente del diseño. Documentar desacuerdos y resolverlos con una persona adjudicadora previamente designada. El autor del protocolo no cuenta como revisión independiente.
+Antes de abrir las nuevas salidas, registrar claves esperadas por tarea, variantes aceptables, citas válidas por condición, errores críticos y versión del contrato. Asignar identificadores aleatorios a las respuestas y ocultar a quienes puntúan cuál corresponde a lectura agrupada o progresiva, su orden, tokens y duración. Dos revisores aplican la misma ficha; al menos uno debe ser independiente del diseño. Documentar desacuerdos y resolverlos con una persona adjudicadora previamente designada. El autor del protocolo no cuenta como revisión independiente.
 
 ## Controles retrospectivos y límites
 

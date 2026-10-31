@@ -1,16 +1,17 @@
 > [!info]- Índice de esta nota (líneas)
-> - Líneas 1–13: Este índice
-> - Líneas 15–18: Registro de coordinación y resultados
-> - Líneas 19–28: R001 — Documentación inicial — 2026-10-29
-> - Líneas 29–39: R002 — P01: reproducción y mitigación local — 2026-10-29
-> - Líneas 40–49: R003 — P02: auditoría offline de navegación — 2026-10-30
-> - Líneas 50–58: R004 — P08/P09: borradores de rúbrica y prerregistro — 2026-10-30
-> - Líneas 59–68: R005 — P02: especificación de preludio y clave Brisa —
-> - Líneas 69–78: R006 — P02: auditoría de secuencia y guion — 2026-10-30
-> - Líneas 79–86: R007 — P02: ficha para revisión independiente — 2026-10-30
-> - Líneas 87–96: R008 — P02: despejar conflicto del preludio — 2026-10-31
-> - Líneas 97–117: Plantilla para una nueva entrada
-> - Líneas 118–122: Requisitos de una entrada de cierre
+> - Líneas 1–14: Este índice
+> - Líneas 16–19: Registro de coordinación y resultados
+> - Líneas 20–29: R001 — Documentación inicial — 2026-10-29
+> - Líneas 30–40: R002 — P01: reproducción y mitigación local — 2026-10-29
+> - Líneas 41–50: R003 — P02: auditoría offline de navegación — 2026-10-30
+> - Líneas 51–59: R004 — P08/P09: borradores de rúbrica y prerregistro — 2026-10-30
+> - Líneas 60–69: R005 — P02: especificación de preludio y clave Brisa —
+> - Líneas 70–79: R006 — P02: auditoría de secuencia y guion — 2026-10-30
+> - Líneas 80–87: R007 — P02: ficha para revisión independiente — 2026-10-30
+> - Líneas 88–97: R008 — P02: despejar conflicto del preludio — 2026-10-31
+> - Líneas 98–107: R009 — P02: alinear cegamiento y citas prospectivas — 2026-10-31
+> - Líneas 108–128: Plantilla para una nueva entrada
+> - Líneas 129–133: Requisitos de una entrada de cierre
 
 # Registro de coordinación y resultados
 
@@ -93,6 +94,16 @@ Añadir entradas fechadas; no borrar intentos fallidos ni reemplazar conclusione
 - Verificación: `indice_lineas.py check` OK en guion, ficha y P09; `git diff --check` limpio. El hash del manifiesto N02 se cotejó y conservó.
 - Límites: autorrevisión, no revisión independiente; no se congeló el protocolo ni se ejecutaron sesiones. El presupuesto nuevo sigue pendiente.
 - Próximo paso: revisor independiente aplica la ficha a guion, P08 y P09; resolver observaciones antes de congelar.
+
+## R009 — P02: alinear cegamiento y citas prospectivas — 2026-10-31
+
+- Autor: IA:Codex (Codex desktop), por indicación de Albert de continuar.
+- Alcance: autorrevisión cruzada de P08, P09 y la ficha de revisión; sin nuevas sesiones.
+- Hecho observado: P08 describía el cegamiento histórico A/B; el piloto propuesto usa N02 en ambos brazos y compara agrupada/progresiva.
+- Cambio: se limitó la evidencia aceptable futura a rutas N02; N01 queda histórica. Los revisores recibirán respuestas con IDs aleatorios sin condición, orden, tokens ni duración visibles. La ficha ahora exige verificar esos límites.
+- Verificación: `indice_lineas.py check` OK en tres documentos y `git diff --check` limpio.
+- Límites: revisión propia, no independiente; no se congeló el protocolo ni se consumieron sesiones. Presupuesto nuevo pendiente.
+- Próximo paso: revisor independiente aplica la ficha actualizada y registra dictamen y objeciones.
 
 ## Plantilla para una nueva entrada
 

@@ -3,9 +3,9 @@
 > [!info]- Índice de esta nota (líneas)
 > - Líneas 3–8: Este índice
 > - Líneas 10–13: Propósito y alcance
-> - Líneas 14–28: Lista de comprobación
-> - Líneas 29–32: Formato de devolución
-> - Líneas 33–35: Reglas de independencia
+> - Líneas 14–29: Lista de comprobación
+> - Líneas 30–33: Formato de devolución
+> - Líneas 34–36: Reglas de independencia
 
 ## Propósito y alcance
 
@@ -20,6 +20,7 @@ Ficha para revisar antes de congelar el piloto de factibilidad P02. Revisar [el 
 - [ ] El mensaje inicial de preludio no contiene una orden incompatible de producir la respuesta final.
 - [ ] Grep queda excluido de la comparación principal; la tarea limita el juicio sobre proveedor a las cinco notas centrales.
 - [ ] P08 cubre todos los campos requeridos, tipos, abstención, notas/roles, vigencia, destinos y evidencia por condición; las citas aceptables respaldan los hechos.
+- [ ] Para el nuevo piloto se aceptan solo citas de N02; N01 queda como evidencia histórica. La puntuación oculta condición, orden y consumo.
 - [ ] El esquema JSON y el mapeo de roles del guion coinciden exactamente con los tipos y la clave de evaluación P08.
 - [ ] `false`, `null` y ausencia textual se distinguen; `proveedor=null` no se generaliza más allá del corpus evaluado.
 - [ ] El conteo evita duplicar acumulados y llamadas; caché, entrada/salida, wall time y tiempo API se presentan por separado.
