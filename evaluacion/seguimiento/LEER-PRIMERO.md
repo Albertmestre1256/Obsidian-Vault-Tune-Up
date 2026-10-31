@@ -9,7 +9,7 @@
 
 # Coordinación del diagnóstico de eficiencia
 
-Estado al 30/10/2026: diez problemas registrados; P01 mitigado localmente, con adopción por agente pendiente. P02 tiene análisis offline y diseño controlado preparados. P08 y P09 están redactados pero no congelados; el revisor independiente y presupuesto nuevo aún no están definidos. No se iniciaron nuevas sesiones de Claude Code. Este directorio coordina el desarrollo y la investigación del kit; no añade requisitos a quien quiere organizar su bóveda.
+Estado al 30/10/2026: diez problemas registrados; P01 mitigado localmente, con adopción por agente pendiente. P02 tiene análisis offline y diseño controlado preparados. P08 y P09 incorporan ahora la clave de Brisa y el conteo explícito del preludio más ocho lecturas; siguen como borradores sin revisión independiente. Revisor y presupuesto nuevo aún no están definidos. No se iniciaron nuevas sesiones de Claude Code. Este directorio coordina el desarrollo y la investigación del kit; no añade requisitos a quien quiere organizar su bóveda.
 
 ## Retomar con poco contexto
 
@@ -29,7 +29,7 @@ Un responsable declarado no equivale a un bloqueo técnico. Releer la ficha y el
 
 ## Orden recomendado
 
-P01 tiene una mitigación local validada; su adopción por agente queda pendiente. P02 ya separó descriptivamente la lectura progresiva del reintento P01. Hay borradores de P08 (rúbrica) y P09 (prerregistro de factibilidad); revisar y congelarlos, asignar revisor independiente y fijar presupuesto antes de sesiones nuevas. P04 puede prepararse por separado; mantener P03, P05, P06 y P10 visibles.
+P01 tiene una mitigación local validada; su adopción por agente queda pendiente. P02 ya separó descriptivamente la lectura progresiva del reintento P01. Se aclaró que la comparación P02 incluye un preludio común (`LEER_PRIMERO.md`) más ocho lecturas medidas. Los borradores P08 (rúbrica de Brisa) y P09 (prerregistro) aún requieren revisión independiente, congelación, presupuesto nuevo y autorización antes de sesiones. P04 puede prepararse por separado; mantener P03, P05, P06 y P10 visibles.
 
 El diagnóstico disponible permite preparar estas tareas, no afirmar que las soluciones ya funcionan. No interpretar este registro como autorización para consumir nuevas cuotas o cambiar la bóveda original. Usar las autorizaciones vigentes; definir el alcance de una nueva campaña antes de iniciarla y no repetir aprobaciones que ya cubran el mismo trabajo.
 

@@ -1,10 +1,11 @@
 > [!info]- Índice de esta nota (líneas)
-> - Líneas 1–7: Este índice
-> - Líneas 9–12: Propósito y estado
-> - Líneas 13–28: Contrato de salida
-> - Líneas 29–37: Reglas de puntuación semántica
-> - Líneas 38–41: Evidencia, revisión y cegamiento
-> - Líneas 42–44: Controles retrospectivos y límites
+> - Líneas 1–8: Este índice
+> - Líneas 10–13: P08: rúbrica de calidad
+> - Líneas 14–29: Contrato de salida
+> - Líneas 30–38: Reglas de puntuación semántica
+> - Líneas 39–57: Clave de evaluación para la tarea Brisa
+> - Líneas 58–61: Evidencia, revisión y cegamiento
+> - Líneas 62–64: Controles retrospectivos y límites
 
 # P08: rúbrica de calidad
 
@@ -34,6 +35,25 @@ Fijar este esquema en el prompt de ambas condiciones. Los valores tienen un tipo
 - Puntuar cada hecho, rol, vigencia, destino y abstención como criterio separado. El éxito estricto requiere todos los criterios obligatorios; publicar también cada resultado individual.
 - No premiar citas por cantidad. Una cita debe apuntar a la ruta de esa condición, al rango existente y al texto que respalda el hecho. Rutas y líneas válidas se fijan por manifiesto antes de puntuar.
 - No resolver una contradicción por fecha más reciente si la fuente define autoridad o aprobación. Una propuesta pendiente no reemplaza una fuente vigente.
+
+## Clave de evaluación para la tarea Brisa
+
+Aplicar esta clave a la tarea ya fijada en `Brisa-prompt.txt`; no mostrarla al modelo ni copiarla a las bóvedas de sesión. La copia A es N01 y la organizada B es N02. Puntuar cada fila por separado; éxito estricto exige todos los criterios obligatorios, evidencia suficiente y cero errores críticos.
+
+| Criterio obligatorio | Respuesta esperada | Evidencia válida en A (N01) | Evidencia válida en B (N02) |
+|---|---|---|---|
+| Objetivo del nodo | Instalar paneles en el centro comunitario ficticio Las Acacias y preparar comprobaciones previas a la entrega | `Pendientes/brisa-plan.md`: 3–8 | `Energía/brisa-plan.md`: 7–12 |
+| Fecha aprobada y lugar | `2031-06-18`; centro Las Acacias | `Fuentes/brisa-acta.md`: 3–8 | `Energía/brisa-acta.md`: 3–8 |
+| Propuesta y vigencia | `2031-06-25` es propuesta pendiente, no fecha aprobada | `Borradores/brisa-propuesta.md`: 3–6; `Fuentes/brisa-acta.md`: 5–8 | `Energía/brisa-propuesta.md`: 7–10; `Energía/brisa-acta.md`: 5–8 |
+| Importe autorizado | `8400 créditos`; máximo autorizado, no gasto ejecutado ni precio de proveedor | `Notas/brisa-presupuesto.md`: 3–8 | `Energía/brisa-presupuesto.md`: 9–14 |
+| Gasto ejecutado | Booleano `false`, con alcance limitado al importe autorizado | `Notas/brisa-presupuesto.md`: 8 | `Energía/brisa-presupuesto.md`: 14 |
+| Propuesta aprobada | Booleano `false` | `Borradores/brisa-propuesta.md`: 4–6 | `Energía/brisa-propuesta.md`: 8–10 |
+| Proveedor contratado | `null`; declarar que no consta en las cinco notas centrales consultadas; no afirmar inexistencia universal | Leer y citar las cinco notas centrales; registrar archivos consultados | Leer y citar las cinco notas centrales; registrar archivos consultados |
+| Cinco notas y roles | Plan: `operativo`; acta: `fuente_aprobada`; presupuesto: `presupuesto`; propuesta: `propuesta_no_aprobada`; acta 2030: `historico` | Rutas arriba y `Archivo/brisa-2030.md`: 3–6 | Rutas arriba y `Archivo/brisa-2030.md`: 3–6 |
+| Destino si cambia el máximo | La nota editable de presupuesto: `Notas/brisa-presupuesto.md` en A; `Energía/brisa-presupuesto.md` en B | `Notas/brisa-presupuesto.md`: 1–8 | `Energía/brisa-presupuesto.md`: 7–14 |
+| Autoridad ante fechas | Acta aprobada vigente del 2031 gobierna; el acta 2030 está sustituida; una propuesta requiere aprobación expresa | `Fuentes/brisa-acta.md`: 3–8; `Archivo/brisa-2030.md`: 3–6; `Borradores/brisa-propuesta.md`: 3–6 | `Energía/brisa-acta.md`: 3–8; `Archivo/brisa-2030.md`: 3–6; `Energía/brisa-propuesta.md`: 7–10 |
+
+Las rutas citadas deben existir en la copia de esa condición y cada rango debe respaldar la afirmación atribuida. Para `proveedor=null`, una cita aislada no demuestra ausencia: se evalúa el registro de las cinco notas centrales efectivamente leídas y una formulación acotada a ellas. Si una fila obligatoria no se informa, puntuarla como omitida; no inferirla de otra respuesta correcta.
 
 ## Evidencia, revisión y cegamiento
 

@@ -37,11 +37,11 @@ Con el mismo corpus, tarea y lecturas necesarias, ¿agrupar lecturas independien
 
 ## Diseño propuesto
 
-Comparar dos ejecuciones aisladas sobre copias nuevas de una única bóveda ficticia fijada por hash. Mantener iguales versión y modelo, esfuerzo, prompt, herramientas, instrucciones, objetivo, manifiesto de rutas y conjunto de ocho archivos que deben leerse (reglas, índice general, índice temático y cinco notas centrales). La lista fija de rutas aísla el orden de lectura; no evalúa descubrimiento de rutas. Mantener esta limitación explícita.
+Comparar dos ejecuciones aisladas sobre copias nuevas e idénticas de la bóveda ficticia organizada N02, fijada por manifiesto. Mantener iguales versión y modelo, esfuerzo, prompt, herramientas, instrucciones, objetivo, manifiesto de rutas y conjunto de ocho archivos medidos (reglas, índice general, índice temático y cinco notas centrales). `LEER_PRIMERO.md` es preludio común adicional: se lee en ambas condiciones, se cuenta dentro del consumo total y se informa también por separado; por tanto, se prevén nueve archivos leídos por sesión. La lista fija de rutas aísla el orden de lectura; no evalúa descubrimiento de rutas. Mantener esta limitación explícita.
 
 - **Agrupada:** tras el mismo contexto inicial, pedir reglas, índice general, índice temático y cinco notas centrales en una respuesta del modelo.
 - **Progresiva:** tras ese mismo contexto, pedir reglas, índice general e índice temático; en la siguiente respuesta, pedir las mismas cinco notas centrales.
-- **Preludio común:** usar idénticos archivos iniciales, incluida la entrada del nodo. Contar el preludio dentro del total de cada sesión y reportar también por separado las solicitudes de la fase medida.
+- **Preludio común:** leer primero `LEER_PRIMERO.md` en cada sesión. Contarlo dentro del total de cada sesión y reportar su coste por separado; las instrucciones y la tarea se mantienen idénticas.
 - **P01 controlado:** no usar Grep en la comparación central. Si una búsqueda resulta imprescindible, aplicar en ambas condiciones el mismo `path` exacto y filtro positivo previamente verificado; nunca usar el glob con espacios que produjo el cero falso.
 - **Conservación:** iniciar cada ejecución desde la misma fuente inmutable; verificar manifiesto antes y después. No editar notas ni reutilizar historiales entre condiciones.
 

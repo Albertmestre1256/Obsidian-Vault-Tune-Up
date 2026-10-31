@@ -1,12 +1,13 @@
 > [!info]- Índice de esta nota (líneas)
-> - Líneas 1–9: Este índice
-> - Líneas 11–14: Registro de coordinación y resultados
-> - Líneas 15–24: R001 — Documentación inicial — 2026-10-29
-> - Líneas 25–35: R002 — P01: reproducción y mitigación local — 2026-10-29
-> - Líneas 36–45: R003 — P02: auditoría offline de navegación — 2026-10-30
-> - Líneas 46–54: R004 — P08/P09: borradores de rúbrica y prerregistro — 2026-10-30
-> - Líneas 55–75: Plantilla para una nueva entrada
-> - Líneas 76–80: Requisitos de una entrada de cierre
+> - Líneas 1–10: Este índice
+> - Líneas 12–15: Registro de coordinación y resultados
+> - Líneas 16–25: R001 — Documentación inicial — 2026-10-29
+> - Líneas 26–36: R002 — P01: reproducción y mitigación local — 2026-10-29
+> - Líneas 37–46: R003 — P02: auditoría offline de navegación — 2026-10-30
+> - Líneas 47–55: R004 — P08/P09: borradores de rúbrica y prerregistro — 2026-10-30
+> - Líneas 56–65: R005 — P02: especificación de preludio y clave Brisa —
+> - Líneas 66–86: Plantilla para una nueva entrada
+> - Líneas 87–91: Requisitos de una entrada de cierre
 
 # Registro de coordinación y resultados
 
@@ -51,6 +52,16 @@ Añadir entradas fechadas; no borrar intentos fallidos ni reemplazar conclusione
 - Límite: ambos borradores esperan revisión/congelación; aún falta revisor independiente, hash/configuración final y nuevo presupuesto autorizado. El tope previo de cuatro sesiones está consumido.
 - Referencias: [rúbrica P08](../P08-RUBRICA.md); [prerregistro P09 para P02](../P09-PREREGISTRO-P02.md). No se ejecutaron pruebas ni modelos.
 - Responsable liberado: IA:Codex. Próximo paso: revisar y congelar alcance con Albert; obtener revisor y autorización antes de sesiones.
+
+## R005 — P02: especificación de preludio y clave Brisa — 2026-10-30
+
+- Autor: IA:Codex (Codex desktop, GPT-6), por indicación de Albert de continuar.
+- Alcance: corregir ambigüedad documental del conjunto de lecturas y hacer puntuable la tarea P02 sin ejecutar sesiones.
+- Hecho observado: P02/P09 fijaban ocho archivos comparados, pero no distinguían `LEER_PRIMERO.md`; P08 no cubría objetivo, cinco roles, vigencia, destino ni evidencia por condición.
+- Cambio: N02 queda propuesto como corpus fijo; preludio común `LEER_PRIMERO.md` más ocho archivos medidos; P08 añade clave de Brisa y rangos válidos para N01/N02. Se acota `proveedor=null` a las cinco notas centrales efectivamente leídas.
+- Resultado: solo borradores; no se ejecutaron modelos, pruebas ni cambios de bóvedas. Revisión independiente y presupuesto continúan pendientes; sin autorización no se ejecutarán sesiones.
+- Referencias: [P02](../P02-NAVEGACION.md), [P08](../P08-RUBRICA.md), [P09](../P09-PREREGISTRO-P02.md). La clave remite a datos sintéticos ya presentes en el expediente local.
+- Responsable: IA:Codex. Próximo paso: revisar independientemente P08/P09, corregir objeciones, congelar calendario/manifiestos y solicitar autorización de presupuesto.
 
 ## Plantilla para una nueva entrada
 

@@ -127,26 +127,26 @@ Al tomar trabajo, reemplazar Sin asignar por IA, herramienta y fecha; indicar el
 ## P08 — Tipos de salida ambiguos
 
 - Prioridad: Media.
-- Etapa: Rúbrica en borrador; congelación pendiente. Responsable: Sin asignar. Último trabajo: IA:Codex (Codex desktop), 30/10/2026.
+- Etapa: Rúbrica en borrador con clave Brisa y citas por condición; congelación pendiente. Responsable: IA:Codex. Último trabajo: IA:Codex (Codex desktop), 30/10/2026.
 - Evidencia actual: Defecto del evaluador. Tres campos correctos de Brisa fallan por tipo en comparación exacta; el prompt permitía texto o número.
 - Localizador: calidad-sin-consumo.json; revisión semántica. Las referencias locales se resuelven mediante F01–F08 en OBSERVACIONES-2026-10-29.md.
 - Dependencias: Ninguna.
-- Próxima acción: Revisar y congelar P08 para la tarea P02; asignar revisión independiente antes de abrir las salidas.
+- Próxima acción: Revisar y congelar P08 para la tarea Brisa de P02; asignar revisión independiente antes de abrir nuevas salidas.
 - Criterio de aceptación: Valores equivalentes reciben la misma nota en A/B; tipos y casos límite fijados antes de nuevas sesiones.
 - Implementación y validación: contrato semántico redactado; no se modificó el evaluador ni se re-puntuaron sesiones históricas. Diseño en P08-RUBRICA.md.
-- Registro de intentos: R004 documenta el borrador; congelación y aplicación pendientes.
+- Registro de intentos: R004 documenta el borrador; R005 añade la clave Brisa; congelación y aplicación pendientes.
 
 ## P09 — Dos nodos y una repetición
 
 - Prioridad: Alta.
-- Etapa: Prerregistro P02 en borrador; presupuesto y revisión independiente pendientes. Responsable: Sin asignar. Último trabajo: IA:Codex (Codex desktop), 30/10/2026.
+- Etapa: Prerregistro P02 en borrador, con tarea Brisa y preludio común especificados; presupuesto y revisión independiente pendientes. Responsable: IA:Codex. Último trabajo: IA:Codex (Codex desktop), 30/10/2026.
 - Evidencia actual: Límite de inferencia. No aísla componentes ni establece causalidad, mínimo de contexto o eficacia general.
 - Localizador: plan.json; N01–N04. Las referencias locales se resuelven mediante F01–F08 en OBSERVACIONES-2026-10-29.md.
 - Dependencias: P07 y P08; cuatro sesiones exploratorias previas agotadas.
-- Próxima acción: Revisar P09, fijar hash/modelo/entorno, nombrar revisor y pedir presupuesto nuevo antes de congelar o ejecutar.
+- Próxima acción: Revisar P09, congelar hash/modelo/entorno y asignar revisión independiente; pedir presupuesto nuevo antes de ejecutar.
 - Criterio de aceptación: Preregistro y presupuesto fijados; revisión sin consumo y al menos una revisión independiente antes de afirmar mejora.
-- Implementación y validación: diseño de factibilidad propuesto con dos pares balanceados; no congelado ni ejecutado. Diseño en P09-PREREGISTRO-P02.md.
-- Registro de intentos: R004 documenta el borrador; no hubo sesiones nuevas.
+- Implementación y validación: diseño de factibilidad propuesto con dos pares balanceados y nueve lecturas por sesión; no congelado ni ejecutado. Diseño en P09-PREREGISTRO-P02.md.
+- Registro de intentos: R004 documenta el borrador; R005 aclara corpus y lecturas; no hubo sesiones nuevas.
 
 ## P10 — Versión de creación de B incompleta
 
