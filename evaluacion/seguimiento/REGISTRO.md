@@ -1,14 +1,15 @@
 > [!info]- Índice de esta nota (líneas)
-> - Líneas 1–11: Este índice
-> - Líneas 13–16: Registro de coordinación y resultados
-> - Líneas 17–26: R001 — Documentación inicial — 2026-10-29
-> - Líneas 27–37: R002 — P01: reproducción y mitigación local — 2026-10-29
-> - Líneas 38–47: R003 — P02: auditoría offline de navegación — 2026-10-30
-> - Líneas 48–56: R004 — P08/P09: borradores de rúbrica y prerregistro — 2026-10-30
-> - Líneas 57–66: R005 — P02: especificación de preludio y clave Brisa —
-> - Líneas 67–76: R006 — P02: auditoría de secuencia y guion — 2026-10-30
-> - Líneas 77–97: Plantilla para una nueva entrada
-> - Líneas 98–102: Requisitos de una entrada de cierre
+> - Líneas 1–12: Este índice
+> - Líneas 14–17: Registro de coordinación y resultados
+> - Líneas 18–27: R001 — Documentación inicial — 2026-10-29
+> - Líneas 28–38: R002 — P01: reproducción y mitigación local — 2026-10-29
+> - Líneas 39–48: R003 — P02: auditoría offline de navegación — 2026-10-30
+> - Líneas 49–57: R004 — P08/P09: borradores de rúbrica y prerregistro — 2026-10-30
+> - Líneas 58–67: R005 — P02: especificación de preludio y clave Brisa —
+> - Líneas 68–77: R006 — P02: auditoría de secuencia y guion — 2026-10-30
+> - Líneas 78–85: R007 — P02: ficha para revisión independiente — 2026-10-30
+> - Líneas 86–106: Plantilla para una nueva entrada
+> - Líneas 107–111: Requisitos de una entrada de cierre
 
 # Registro de coordinación y resultados
 
@@ -73,6 +74,14 @@ Añadir entradas fechadas; no borrar intentos fallidos ni reemplazar conclusione
 - Resultado: guion en borrador en [P02-INTERACCIONES-BRISA.md](../P02-INTERACCIONES-BRISA.md); no se ejecutaron modelos ni pruebas. Revisión independiente, hash final y presupuesto nuevo pendientes.
 - Referencias: [P02](../P02-NAVEGACION.md), [P08](../P08-RUBRICA.md), [P09](../P09-PREREGISTRO-P02.md). Evidencia original: N01/N02 `eventos.jsonl` en expediente privado.
 - Responsable: IA:Codex. Próximo paso: revisión independiente del guion y protocolo; no iniciar sesión antes de autorización de presupuesto.
+
+## R007 — P02: ficha para revisión independiente — 2026-10-30
+
+- Autor: IA:Codex (Codex desktop, GPT-6), por indicación de Albert de continuar.
+- Alcance: hacer verificable la revisión de P08/P09 y del guion sin abrir sesiones de modelo.
+- Cambio: se añadió una lista de control y formato de devolución en [P02-REVISION-INDEPENDIENTE.md](../P02-REVISION-INDEPENDIENTE.md); P09 y el seguimiento enlazan la ficha.
+- Resultado: material listo para revisión; no equivale a una revisión independiente ni congela el protocolo. No hubo sesiones, pruebas ni cambios en bóvedas.
+- Próximo paso: asignar persona revisora independiente, registrar objeciones y responder antes de congelar; presupuesto nuevo sigue pendiente.
 
 ## Plantilla para una nueva entrada
 

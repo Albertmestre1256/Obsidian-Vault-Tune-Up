@@ -143,9 +143,9 @@ Al tomar trabajo, reemplazar Sin asignar por IA, herramienta y fecha; indicar el
 - Evidencia actual: Límite de inferencia. No aísla componentes ni establece causalidad, mínimo de contexto o eficacia general.
 - Localizador: plan.json; N01–N04. Las referencias locales se resuelven mediante F01–F08 en OBSERVACIONES-2026-10-29.md.
 - Dependencias: P07 y P08; cuatro sesiones exploratorias previas agotadas.
-- Próxima acción: Revisar P08/P09 y el guion de interacción, congelar hashes/modelo/entorno y asignar revisor; pedir presupuesto nuevo antes de ejecutar.
+- Próxima acción: Aplicar P02-REVISION-INDEPENDIENTE.md a P08/P09 y al guion; resolver objeciones, congelar hashes/modelo/entorno y fijar presupuesto antes de ejecutar.
 - Criterio de aceptación: Preregistro y presupuesto fijados; revisión sin consumo y al menos una revisión independiente antes de afirmar mejora.
-- Implementación y validación: diseño de factibilidad propuesto con dos pares contrabalanceados, preludio común y guion de interacción; no congelado ni ejecutado. Diseño en P09-PREREGISTRO-P02.md y P02-INTERACCIONES-BRISA.md.
+- Implementación y validación: diseño de factibilidad propuesto con dos pares contrabalanceados, preludio común y guion de interacción; ficha de revisión preparada. No congelado ni ejecutado. Diseño en P09-PREREGISTRO-P02.md, P02-INTERACCIONES-BRISA.md y P02-REVISION-INDEPENDIENTE.md.
 - Registro de intentos: R004 documenta el borrador; R005 aclara corpus y lecturas; R006 registra la auditoría de secuencia y el guion; no hubo sesiones nuevas.
 
 ## P10 — Versión de creación de B incompleta

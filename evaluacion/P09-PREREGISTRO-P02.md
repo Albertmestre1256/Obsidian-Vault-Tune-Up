@@ -37,7 +37,7 @@ Calidad es una condición de aceptación, no un descuento intercambiable por tok
 
 Diseño de factibilidad propuesto: dos pares, uno agrupada→progresiva y uno progresiva→agrupada; registrar el calendario exacto antes de iniciar. Presupuesto de llamadas: máximo cuatro sesiones nuevas; gasto monetario máximo y límites por intento quedan por fijar con Albert. **No ejecutar** hasta recibir nueva autorización de presupuesto. Identificar un revisor independiente que puntúe salidas anonimizadas sin ver consumo; aún no está asignado. Un segundo revisor aplica la misma ficha a ciegas; los desacuerdos se envían a una persona adjudicadora designada antes de congelar.
 
-Congelar antes de correr: hash de corpus y manifiesto, prompt P02 y clave P08, el guion de interacción revisado y su hash, citas válidas por condición, modelo/cliente/permisos, orden, límites, presupuesto y responsables de revisión/adjudicación. Registrar hashes en el expediente privado y publicar solo resúmenes sin metadatos de cuenta.
+Congelar antes de correr: hash de corpus y manifiesto, prompt P02 y clave P08, el guion de interacción revisado y su hash, citas válidas por condición, modelo/cliente/permisos, orden, límites, presupuesto y responsables de revisión/adjudicación. Aplicar la [ficha de revisión independiente](P02-REVISION-INDEPENDIENTE.md) y registrar objeciones/respuestas. Registrar hashes en el expediente privado y publicar solo resúmenes sin metadatos de cuenta.
 
 ## Exclusiones y parada
 
