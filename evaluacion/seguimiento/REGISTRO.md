@@ -1,13 +1,14 @@
 > [!info]- Índice de esta nota (líneas)
-> - Líneas 1–10: Este índice
-> - Líneas 12–15: Registro de coordinación y resultados
-> - Líneas 16–25: R001 — Documentación inicial — 2026-10-29
-> - Líneas 26–36: R002 — P01: reproducción y mitigación local — 2026-10-29
-> - Líneas 37–46: R003 — P02: auditoría offline de navegación — 2026-10-30
-> - Líneas 47–55: R004 — P08/P09: borradores de rúbrica y prerregistro — 2026-10-30
-> - Líneas 56–65: R005 — P02: especificación de preludio y clave Brisa —
-> - Líneas 66–86: Plantilla para una nueva entrada
-> - Líneas 87–91: Requisitos de una entrada de cierre
+> - Líneas 1–11: Este índice
+> - Líneas 13–16: Registro de coordinación y resultados
+> - Líneas 17–26: R001 — Documentación inicial — 2026-10-29
+> - Líneas 27–37: R002 — P01: reproducción y mitigación local — 2026-10-29
+> - Líneas 38–47: R003 — P02: auditoría offline de navegación — 2026-10-30
+> - Líneas 48–56: R004 — P08/P09: borradores de rúbrica y prerregistro — 2026-10-30
+> - Líneas 57–66: R005 — P02: especificación de preludio y clave Brisa —
+> - Líneas 67–76: R006 — P02: auditoría de secuencia y guion — 2026-10-30
+> - Líneas 77–97: Plantilla para una nueva entrada
+> - Líneas 98–102: Requisitos de una entrada de cierre
 
 # Registro de coordinación y resultados
 
@@ -62,6 +63,16 @@ Añadir entradas fechadas; no borrar intentos fallidos ni reemplazar conclusione
 - Resultado: solo borradores; no se ejecutaron modelos, pruebas ni cambios de bóvedas. Revisión independiente y presupuesto continúan pendientes; sin autorización no se ejecutarán sesiones.
 - Referencias: [P02](../P02-NAVEGACION.md), [P08](../P08-RUBRICA.md), [P09](../P09-PREREGISTRO-P02.md). La clave remite a datos sintéticos ya presentes en el expediente local.
 - Responsable: IA:Codex. Próximo paso: revisar independientemente P08/P09, corregir objeciones, congelar calendario/manifiestos y solicitar autorización de presupuesto.
+
+## R006 — P02: auditoría de secuencia y guion — 2026-10-30
+
+- Autor: IA:Codex (Codex desktop, GPT-6), por indicación de Albert de continuar.
+- Alcance: contrastar la interacción P02 con las trazas originales y redactar un guion fijo para el piloto sin iniciar sesiones.
+- Hecho observado: N01 y N02 leen `LEER_PRIMERO.md` y generan `Glob("**/*")` en el mismo `request_id`; luego N01 lee reglas, índice y cinco notas, mientras N02 lee además el índice temático antes de esas notas.
+- Cambio: el inventario Glob se fija como parte del preludio común; se define N02 como corpus para aislar secuencia. Se redacta mensaje base, preludio, orden agrupado y dos fases progresivas; la variante P02 prohíbe Grep y acota la abstención de proveedor.
+- Resultado: guion en borrador en [P02-INTERACCIONES-BRISA.md](../P02-INTERACCIONES-BRISA.md); no se ejecutaron modelos ni pruebas. Revisión independiente, hash final y presupuesto nuevo pendientes.
+- Referencias: [P02](../P02-NAVEGACION.md), [P08](../P08-RUBRICA.md), [P09](../P09-PREREGISTRO-P02.md). Evidencia original: N01/N02 `eventos.jsonl` en expediente privado.
+- Responsable: IA:Codex. Próximo paso: revisión independiente del guion y protocolo; no iniciar sesión antes de autorización de presupuesto.
 
 ## Plantilla para una nueva entrada
 
