@@ -1,17 +1,18 @@
 > [!info]- Índice de esta nota (líneas)
-> - Líneas 1–14: Este índice
-> - Líneas 16–19: Registro de coordinación y resultados
-> - Líneas 20–29: R001 — Documentación inicial — 2026-10-29
-> - Líneas 30–40: R002 — P01: reproducción y mitigación local — 2026-10-29
-> - Líneas 41–50: R003 — P02: auditoría offline de navegación — 2026-10-30
-> - Líneas 51–59: R004 — P08/P09: borradores de rúbrica y prerregistro — 2026-10-30
-> - Líneas 60–69: R005 — P02: especificación de preludio y clave Brisa —
-> - Líneas 70–79: R006 — P02: auditoría de secuencia y guion — 2026-10-30
-> - Líneas 80–87: R007 — P02: ficha para revisión independiente — 2026-10-30
-> - Líneas 88–97: R008 — P02: despejar conflicto del preludio — 2026-10-31
-> - Líneas 98–107: R009 — P02: alinear cegamiento y citas prospectivas — 2026-10-31
-> - Líneas 108–128: Plantilla para una nueva entrada
-> - Líneas 129–133: Requisitos de una entrada de cierre
+> - Líneas 1–15: Este índice
+> - Líneas 17–20: Registro de coordinación y resultados
+> - Líneas 21–30: R001 — Documentación inicial — 2026-10-29
+> - Líneas 31–41: R002 — P01: reproducción y mitigación local — 2026-10-29
+> - Líneas 42–51: R003 — P02: auditoría offline de navegación — 2026-10-30
+> - Líneas 52–60: R004 — P08/P09: borradores de rúbrica y prerregistro — 2026-10-30
+> - Líneas 61–70: R005 — P02: especificación de preludio y clave Brisa —
+> - Líneas 71–80: R006 — P02: auditoría de secuencia y guion — 2026-10-30
+> - Líneas 81–88: R007 — P02: ficha para revisión independiente — 2026-10-30
+> - Líneas 89–98: R008 — P02: despejar conflicto del preludio — 2026-10-31
+> - Líneas 99–108: R009 — P02: alinear cegamiento y citas prospectivas — 2026-10-31
+> - Líneas 109–117: R010 — P02: verificar referencias de la clave N02 —
+> - Líneas 118–138: Plantilla para una nueva entrada
+> - Líneas 139–143: Requisitos de una entrada de cierre
 
 # Registro de coordinación y resultados
 
@@ -104,6 +105,15 @@ Añadir entradas fechadas; no borrar intentos fallidos ni reemplazar conclusione
 - Verificación: `indice_lineas.py check` OK en tres documentos y `git diff --check` limpio.
 - Límites: revisión propia, no independiente; no se congeló el protocolo ni se consumieron sesiones. Presupuesto nuevo pendiente.
 - Próximo paso: revisor independiente aplica la ficha actualizada y registra dictamen y objeciones.
+
+## R010 — P02: verificar referencias de la clave N02 — 2026-10-31
+
+- Autor: IA:Codex (Codex desktop), por indicación de Albert de continuar.
+- Alcance: contraste estático de las cinco notas centrales de N02 con P08 y su manifiesto; sin editar la copia ni ejecutar modelos.
+- Hecho verificado: el hash actual del manifiesto coincide con `31951d3a622dbaf487b675a379a53a46ff305236f828b088ed4b51e7382221a9`; las cinco notas centrales coinciden con sus hashes registrados. Las citas B de P08 apuntan a líneas existentes y pertinentes: plan 7–12, acta 3–8, presupuesto 9–14, propuesta 7–10 e historia 3–6.
+- Decisión: conservar P08 sin cambios en esta pasada; el alcance de citas solo N02 para el piloto ya quedó documentado en R009.
+- Límites: comprobación propia sobre la instantánea local, no revisión independiente de la semántica del protocolo.
+- Próximo paso: revisión independiente de P08/P09/guion y decisión del presupuesto antes de correr sesiones.
 
 ## Plantilla para una nueva entrada
 
